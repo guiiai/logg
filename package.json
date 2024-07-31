@@ -1,6 +1,6 @@
 {
   "name": "@guiiai/logg",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Yet another simple, nearly zero dependency, structural log compliance logger implementation.",
   "repository": "https://github.com/guiiai/logg",
   "license": "MIT",
