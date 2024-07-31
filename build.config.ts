@@ -6,4 +6,7 @@ export default defineBuildConfig({
     './src/index'
   ],
   declaration: true, // generate .d.ts files
+  rollup: {
+    emitCJS: true
+  }
 })

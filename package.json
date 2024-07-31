@@ -2,15 +2,20 @@
   "name": "logger",
   "version": "1.0.0",
   "description": "A logger with colorette",
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs"
     }
   },
   "scripts": {
-    "build": "unbuild ."
+    "dev": "unbuild --stub",
+    "build": "unbuild"
   },
   "packageManager": "pnpm@9.6.0",
   "dependencies": {
