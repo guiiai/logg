@@ -1,5 +1,5 @@
 {
-  "name": "logg",
+  "name": "@guiiai/logg",
   "version": "1.0.0",
   "description": "Yet another simple, nearly zero dependency, structural log compliance logger implementation.",
   "main": "./dist/index.cjs",

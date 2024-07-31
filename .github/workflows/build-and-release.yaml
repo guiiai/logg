@@ -1,4 +1,4 @@
-name: Relase
+name: Build and Release
 
 on:
   push:
