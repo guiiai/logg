@@ -248,7 +248,7 @@ function setGlobalFormat(format) {
   }
   GLOBAL_CONFIG.configured = true;
 }
-function useLog(context) {
+function createLogger(context) {
   const logObj = {
     fields: {},
     context,
@@ -262,7 +262,7 @@ function useLog(context) {
       return logObj.child();
     },
     child: (fields) => {
-      const logger = useLog(logObj.context);
+      const logger = createLogger(logObj.context);
       if (typeof fields !== "undefined" || fields !== null) {
         logger.fields = { ...logObj.fields, ...fields };
       } else {
@@ -525,6 +525,7 @@ function useLog(context) {
   };
   return logObj;
 }
+const useLogger = createLogger;
 
 exports.Format = Format;
 exports.LogLevel = LogLevel;
@@ -532,15 +533,13 @@ exports.LogLevelString = LogLevelString;
 exports.availableFormats = availableFormats;
 exports.availableLogLevelStrings = availableLogLevelStrings;
 exports.availableLogLevels = availableLogLevels;
+exports.createLogger = createLogger;
 exports.getGlobalFormat = getGlobalFormat;
 exports.getGlobalLogLevel = getGlobalLogLevel;
 exports.getGlobalLogLevelString = getGlobalLogLevelString;
-exports.isErrorLike = isErrorLike;
 exports.logLevelStringToLogLevelMap = logLevelStringToLogLevelMap;
 exports.logLevelToChalkColorMap = logLevelToChalkColorMap;
 exports.logLevelToLogLevelStringMap = logLevelToLogLevelStringMap;
-exports.newErrorLog = newErrorLog;
-exports.newLog = newLog;
 exports.setGlobalFormat = setGlobalFormat;
 exports.setGlobalLogLevel = setGlobalLogLevel;
 exports.setGlobalLogLevelString = setGlobalLogLevelString;
@@ -549,5 +548,4 @@ exports.shouldOutputErrorLevelLogWhenLogLevelIsOneOf = shouldOutputErrorLevelLog
 exports.shouldOutputLogLevelLogWhenLogLevelIsOneOf = shouldOutputLogLevelLogWhenLogLevelIsOneOf;
 exports.shouldOutputVerboseLevelLogWhenLogLevelIsOneOf = shouldOutputVerboseLevelLogWhenLogLevelIsOneOf;
 exports.shouldOutputWarningLevelLogWhenLogLevelIsOneOf = shouldOutputWarningLevelLogWhenLogLevelIsOneOf;
-exports.toPrettyString = toPrettyString;
-exports.useLog = useLog;
+exports.useLogger = useLogger;

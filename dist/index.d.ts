@@ -159,7 +159,8 @@ interface Logger {
      */
     warn: (message: any, ...optionalParams: [...any, string?]) => void;
 }
-declare function useLog(context: string): Logger;
+declare function createLogger(context: string): Logger;
+declare const useLogger: typeof createLogger;
 
 declare const logLevelStringToLogLevelMap: Record<LogLevelString, LogLevel>;
 declare const logLevelToLogLevelStringMap: Record<LogLevel, LogLevelString>;
@@ -173,14 +174,4 @@ declare function shouldOutputWarningLevelLogWhenLogLevelIsOneOf(logLevel: LogLev
 declare function shouldOutputErrorLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean;
 declare const availableFormats: Format[];
 
-interface ErrorLike {
-    message: string;
-    stack?: string;
-    cause?: any;
-}
-declare function isErrorLike(err: unknown): err is ErrorLike;
-declare function newLog(logLevel: LogLevelString, context: string, fields: Record<string, any>, message: string, ...optionalParams: [...any, string?]): Log;
-declare function newErrorLog(logLevel: LogLevelString, context: string, fields: Record<string, any>, message: string, errorStack?: string, ...optionalParams: [...any, string?]): Log;
-declare function toPrettyString(log: Log): string;
-
-export { type ErrorLike, Format, type Log, LogLevel, LogLevelString, availableFormats, availableLogLevelStrings, availableLogLevels, getGlobalFormat, getGlobalLogLevel, getGlobalLogLevelString, isErrorLike, logLevelStringToLogLevelMap, logLevelToChalkColorMap, logLevelToLogLevelStringMap, newErrorLog, newLog, setGlobalFormat, setGlobalLogLevel, setGlobalLogLevelString, shouldOutputDebugLevelLogWhenLogLevelIsOneOf, shouldOutputErrorLevelLogWhenLogLevelIsOneOf, shouldOutputLogLevelLogWhenLogLevelIsOneOf, shouldOutputVerboseLevelLogWhenLogLevelIsOneOf, shouldOutputWarningLevelLogWhenLogLevelIsOneOf, toPrettyString, useLog };
+export { Format, type Log, LogLevel, LogLevelString, availableFormats, availableLogLevelStrings, availableLogLevels, createLogger, getGlobalFormat, getGlobalLogLevel, getGlobalLogLevelString, logLevelStringToLogLevelMap, logLevelToChalkColorMap, logLevelToLogLevelStringMap, setGlobalFormat, setGlobalLogLevel, setGlobalLogLevelString, shouldOutputDebugLevelLogWhenLogLevelIsOneOf, shouldOutputErrorLevelLogWhenLogLevelIsOneOf, shouldOutputLogLevelLogWhenLogLevelIsOneOf, shouldOutputVerboseLevelLogWhenLogLevelIsOneOf, shouldOutputWarningLevelLogWhenLogLevelIsOneOf, useLogger };

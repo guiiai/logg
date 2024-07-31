@@ -204,7 +204,7 @@ interface InternalLogger extends Logger {
   shouldUseGlobalConfig: boolean
 }
 
-export function useLog(context: string): Logger {
+export function createLogg(context: string): Logger {
   const logObj: InternalLogger = {
     fields: {},
     context,
@@ -219,7 +219,7 @@ export function useLog(context: string): Logger {
       return logObj.child()
     },
     child: (fields?: Record<string, any>): Logger => {
-      const logger = useLog(logObj.context) as InternalLogger
+      const logger = createLogg(logObj.context) as InternalLogger
 
       if (typeof fields !== 'undefined' || fields !== null) {
         logger.fields = { ...logObj.fields, ...fields }
@@ -546,3 +546,5 @@ export function useLog(context: string): Logger {
 
   return logObj
 }
+
+export const useLogg = createLogg
