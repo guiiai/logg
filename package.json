@@ -2,6 +2,18 @@
   "name": "@guiiai/logg",
   "version": "1.0.0",
   "description": "Yet another simple, nearly zero dependency, structural log compliance logger implementation.",
+  "repository": "https://github.com/guiiai/logg",
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Neko Ayaka",
+      "author": "Neko Ayaka <neko@ayaka.moe> (https://github.com/nekomeowww)"
+    },
+    {
+      "name": "RainbowBird",
+      "author": "RainbowBird <rbxin2003@outlook.com> (https://github.com/RainbowBird)"
+    }
+  ],
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "files": [
