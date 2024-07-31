@@ -1,5 +1,5 @@
 {
-  "name": "logger",
+  "name": "logg",
   "version": "1.0.0",
   "description": "A logger with colorette",
   "main": "./dist/index.cjs",
