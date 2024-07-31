@@ -15,7 +15,8 @@
   },
   "scripts": {
     "dev": "unbuild --stub",
-    "build": "unbuild"
+    "build": "unbuild",
+    "package:publish": "pnpm build && pnpm publish --access public --no-git-checks"
   },
   "packageManager": "pnpm@9.6.0",
   "dependencies": {
