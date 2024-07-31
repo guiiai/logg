@@ -1,7 +1,7 @@
 {
   "name": "logg",
   "version": "1.0.0",
-  "description": "A logger with colorette",
+  "description": "Yet another simple, nearly zero dependency, structural log compliance logger implementation.",
   "main": "./dist/index.cjs",
   "types": "./dist/index.d.ts",
   "files": [
