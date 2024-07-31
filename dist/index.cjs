@@ -248,7 +248,7 @@ function setGlobalFormat(format) {
   }
   GLOBAL_CONFIG.configured = true;
 }
-function createLogger(context) {
+function createLogg(context) {
   const logObj = {
     fields: {},
     context,
@@ -262,7 +262,7 @@ function createLogger(context) {
       return logObj.child();
     },
     child: (fields) => {
-      const logger = createLogger(logObj.context);
+      const logger = createLogg(logObj.context);
       if (typeof fields !== "undefined" || fields !== null) {
         logger.fields = { ...logObj.fields, ...fields };
       } else {
@@ -525,7 +525,7 @@ function createLogger(context) {
   };
   return logObj;
 }
-const useLogger = createLogger;
+const useLogg = createLogg;
 
 exports.Format = Format;
 exports.LogLevel = LogLevel;
@@ -533,7 +533,7 @@ exports.LogLevelString = LogLevelString;
 exports.availableFormats = availableFormats;
 exports.availableLogLevelStrings = availableLogLevelStrings;
 exports.availableLogLevels = availableLogLevels;
-exports.createLogger = createLogger;
+exports.createLogg = createLogg;
 exports.getGlobalFormat = getGlobalFormat;
 exports.getGlobalLogLevel = getGlobalLogLevel;
 exports.getGlobalLogLevelString = getGlobalLogLevelString;
@@ -548,4 +548,4 @@ exports.shouldOutputErrorLevelLogWhenLogLevelIsOneOf = shouldOutputErrorLevelLog
 exports.shouldOutputLogLevelLogWhenLogLevelIsOneOf = shouldOutputLogLevelLogWhenLogLevelIsOneOf;
 exports.shouldOutputVerboseLevelLogWhenLogLevelIsOneOf = shouldOutputVerboseLevelLogWhenLogLevelIsOneOf;
 exports.shouldOutputWarningLevelLogWhenLogLevelIsOneOf = shouldOutputWarningLevelLogWhenLogLevelIsOneOf;
-exports.useLogger = useLogger;
+exports.useLogg = useLogg;

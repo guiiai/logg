@@ -246,7 +246,7 @@ function setGlobalFormat(format) {
   }
   GLOBAL_CONFIG.configured = true;
 }
-function createLogger(context) {
+function createLogg(context) {
   const logObj = {
     fields: {},
     context,
@@ -260,7 +260,7 @@ function createLogger(context) {
       return logObj.child();
     },
     child: (fields) => {
-      const logger = createLogger(logObj.context);
+      const logger = createLogg(logObj.context);
       if (typeof fields !== "undefined" || fields !== null) {
         logger.fields = { ...logObj.fields, ...fields };
       } else {
@@ -523,6 +523,6 @@ function createLogger(context) {
   };
   return logObj;
 }
-const useLogger = createLogger;
+const useLogg = createLogg;
 
-export { Format, LogLevel, LogLevelString, availableFormats, availableLogLevelStrings, availableLogLevels, createLogger, getGlobalFormat, getGlobalLogLevel, getGlobalLogLevelString, logLevelStringToLogLevelMap, logLevelToChalkColorMap, logLevelToLogLevelStringMap, setGlobalFormat, setGlobalLogLevel, setGlobalLogLevelString, shouldOutputDebugLevelLogWhenLogLevelIsOneOf, shouldOutputErrorLevelLogWhenLogLevelIsOneOf, shouldOutputLogLevelLogWhenLogLevelIsOneOf, shouldOutputVerboseLevelLogWhenLogLevelIsOneOf, shouldOutputWarningLevelLogWhenLogLevelIsOneOf, useLogger };
+export { Format, LogLevel, LogLevelString, availableFormats, availableLogLevelStrings, availableLogLevels, createLogg, getGlobalFormat, getGlobalLogLevel, getGlobalLogLevelString, logLevelStringToLogLevelMap, logLevelToChalkColorMap, logLevelToLogLevelStringMap, setGlobalFormat, setGlobalLogLevel, setGlobalLogLevelString, shouldOutputDebugLevelLogWhenLogLevelIsOneOf, shouldOutputErrorLevelLogWhenLogLevelIsOneOf, shouldOutputLogLevelLogWhenLogLevelIsOneOf, shouldOutputVerboseLevelLogWhenLogLevelIsOneOf, shouldOutputWarningLevelLogWhenLogLevelIsOneOf, useLogg };

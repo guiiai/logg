@@ -159,8 +159,8 @@ interface Logger {
      */
     warn: (message: any, ...optionalParams: [...any, string?]) => void;
 }
-declare function createLogger(context: string): Logger;
-declare const useLogger: typeof createLogger;
+declare function createLogg(context: string): Logger;
+declare const useLogg: typeof createLogg;
 
 declare const logLevelStringToLogLevelMap: Record<LogLevelString, LogLevel>;
 declare const logLevelToLogLevelStringMap: Record<LogLevel, LogLevelString>;
@@ -174,4 +174,4 @@ declare function shouldOutputWarningLevelLogWhenLogLevelIsOneOf(logLevel: LogLev
 declare function shouldOutputErrorLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean;
 declare const availableFormats: Format[];
 
-export { Format, type Log, LogLevel, LogLevelString, availableFormats, availableLogLevelStrings, availableLogLevels, createLogger, getGlobalFormat, getGlobalLogLevel, getGlobalLogLevelString, logLevelStringToLogLevelMap, logLevelToChalkColorMap, logLevelToLogLevelStringMap, setGlobalFormat, setGlobalLogLevel, setGlobalLogLevelString, shouldOutputDebugLevelLogWhenLogLevelIsOneOf, shouldOutputErrorLevelLogWhenLogLevelIsOneOf, shouldOutputLogLevelLogWhenLogLevelIsOneOf, shouldOutputVerboseLevelLogWhenLogLevelIsOneOf, shouldOutputWarningLevelLogWhenLogLevelIsOneOf, useLogger };
+export { Format, type Log, LogLevel, LogLevelString, availableFormats, availableLogLevelStrings, availableLogLevels, createLogg, getGlobalFormat, getGlobalLogLevel, getGlobalLogLevelString, logLevelStringToLogLevelMap, logLevelToChalkColorMap, logLevelToLogLevelStringMap, setGlobalFormat, setGlobalLogLevel, setGlobalLogLevelString, shouldOutputDebugLevelLogWhenLogLevelIsOneOf, shouldOutputErrorLevelLogWhenLogLevelIsOneOf, shouldOutputLogLevelLogWhenLogLevelIsOneOf, shouldOutputVerboseLevelLogWhenLogLevelIsOneOf, shouldOutputWarningLevelLogWhenLogLevelIsOneOf, useLogg };
