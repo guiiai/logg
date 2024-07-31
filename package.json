@@ -1,0 +1,22 @@
+{
+  "name": "logger",
+  "version": "1.0.0",
+  "description": "A logger with colorette",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "unbuild ."
+  },
+  "packageManager": "pnpm@9.6.0",
+  "dependencies": {
+    "colorette": "^2.0.20"
+  },
+  "devDependencies": {
+    "unbuild": "^2.0.0"
+  }
+}
