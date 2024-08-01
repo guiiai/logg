@@ -77,4 +77,13 @@ log
 - `LogLevelString`: Enum for log level strings (`error`, `warn`, `log`, `verbose`, `debug`).
 - `Format`: Enum for log formats (`JSON`, `Pretty`).
 
-## Made with ❤
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=guiiai/logg&type=Date)](https://star-history.com/#guiiai/logg&Date)
+
+
+## Contributors
+
+[![contributors](https://contrib.rocks/image?repo=guiiai/logg)](https://github.com/guiiai/logg/graphs/contributors)
+
+### Made with ❤
