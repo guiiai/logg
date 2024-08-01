@@ -1,9 +1,9 @@
 {
   "name": "@guiiai/logg",
+  "type": "module",
   "version": "1.0.1",
+  "packageManager": "pnpm@9.6.0",
   "description": "Yet another simple, nearly zero dependency, structural log compliance logger implementation.",
-  "repository": "https://github.com/guiiai/logg",
-  "license": "MIT",
   "contributors": [
     {
       "name": "Neko Ayaka",
@@ -14,27 +14,30 @@
       "author": "RainbowBird <rbxin2003@outlook.com> (https://github.com/RainbowBird)"
     }
   ],
-  "main": "./dist/index.cjs",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "license": "MIT",
+  "repository": "https://github.com/guiiai/logg",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     }
   },
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "unbuild --stub",
     "build": "unbuild",
     "package:publish": "pnpm build && pnpm publish --access public --no-git-checks"
   },
-  "packageManager": "pnpm@9.6.0",
   "dependencies": {
     "colorette": "^2.0.20"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "2.21",
+    "eslint": "8",
     "unbuild": "^2.0.0"
   }
 }

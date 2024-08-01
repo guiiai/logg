@@ -51,24 +51,4 @@ export const availableLogLevels: LogLevel[] = [
   LogLevel.Debug,
 ]
 
-export function shouldOutputDebugLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean {
-  return logLevel >= LogLevel.Debug
-}
-
-export function shouldOutputVerboseLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean {
-  return logLevel >= LogLevel.Verbose
-}
-
-export function shouldOutputLogLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean {
-  return logLevel >= LogLevel.Log
-}
-
-export function shouldOutputWarningLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean {
-  return logLevel >= LogLevel.Warning
-}
-
-export function shouldOutputErrorLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean {
-  return logLevel >= LogLevel.Error
-}
-
 export const availableFormats: Format[] = [Format.JSON, Format.Pretty]
