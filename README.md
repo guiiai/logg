@@ -23,7 +23,10 @@ npm install @guiiai/logg
 ## Usage
 
 ```javascript
-import { createLogg } from '@guiiai/logg'
+import { Format, LogLevel, createLogg, setGlobalFormat, setGlobalLogLevel } from '@guiiai/logg'
+
+setGlobalLogLevel(LogLevel.Debug)
+setGlobalFormat(Format.Pretty) // Otherwise it will output JSON
 
 // Create a logger instance with a specific context
 const log = createLogg('http/request').useGlobalConfig()
