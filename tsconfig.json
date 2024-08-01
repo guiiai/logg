@@ -2,12 +2,11 @@
   "compilerOptions": {
     "target": "ESNext",
     "jsx": "preserve",
-    "lib": [ 
+    "lib": [
       "ESNext",
       "DOM"
     ],
     "baseUrl": ".",
-    "outDir": "./dist",
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "strict": true,
@@ -16,6 +15,7 @@
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,

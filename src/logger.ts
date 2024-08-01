@@ -5,13 +5,19 @@ import {
   availableLogLevels,
   logLevelStringToLogLevelMap,
   logLevelToLogLevelStringMap,
+} from './constants'
+import {
+  isErrorLike,
+  newErrorLog,
+  newLog,
   shouldOutputDebugLevelLogWhenLogLevelIsOneOf,
   shouldOutputErrorLevelLogWhenLogLevelIsOneOf,
   shouldOutputLogLevelLogWhenLogLevelIsOneOf,
   shouldOutputVerboseLevelLogWhenLogLevelIsOneOf,
   shouldOutputWarningLevelLogWhenLogLevelIsOneOf,
-} from './constants'
-import { isErrorLike, newErrorLog, newLog, toPrettyString } from './utils'
+  toPrettyString,
+} from './utils'
+import { parseErrorStacks } from './stack'
 
 const GLOBAL_CONFIG = {
   configured: false,
@@ -138,6 +144,11 @@ interface Logger {
    * @returns
    */
   withError: (err: Error | unknown) => Logger
+  /**
+   * Works like `child()`, but will try to get the call stack and add it to the logger.
+   * This is useful for debugging purposes.
+   */
+  withCallStack: (errorLike: { message: string, stack?: string }) => Logger
   /**
    * Write a 'debug' level log, if the configured level allows for it.
    * Prints to `stdout` with newline.
@@ -341,6 +352,20 @@ export function createLogg(context: string): Logger {
       }
 
       return logObj
+    },
+
+    withCallStack(errorLike: { message: string, stack?: string }): Logger {
+      const stacks = parseErrorStacks(errorLike).slice(2).filter(item => !item.invalid)
+      if (stacks.length === 0) {
+        return logObj
+      }
+
+      return logObj.child({
+        function: stacks[0].function,
+        file: `${stacks[0].file}:${stacks[0].line}:${stacks[0].column}`,
+        line: stacks[0].line,
+        column: stacks[0].column,
+      })
     },
 
     debug(message: any, ...optionalParams: [...any, string?]): void {

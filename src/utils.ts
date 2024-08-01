@@ -2,6 +2,7 @@ import { gray, green, magenta, yellow } from 'colorette'
 
 import { logLevelStringToLogLevelMap, logLevelToChalkColorMap } from './constants'
 import type { Log, LogLevelString } from './types'
+import { LogLevel } from './types'
 
 export interface ErrorLike {
   message: string
@@ -151,4 +152,24 @@ export function toPrettyString(log: Log): string {
   }
 
   return message
+}
+
+export function shouldOutputDebugLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean {
+  return logLevel >= LogLevel.Debug
+}
+
+export function shouldOutputVerboseLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean {
+  return logLevel >= LogLevel.Verbose
+}
+
+export function shouldOutputLogLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean {
+  return logLevel >= LogLevel.Log
+}
+
+export function shouldOutputWarningLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean {
+  return logLevel >= LogLevel.Warning
+}
+
+export function shouldOutputErrorLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean {
+  return logLevel >= LogLevel.Error
 }
