@@ -1,35 +1,38 @@
-# Logg
+# @guiiai/logg
 
 Yet another simple, nearly zero dependency, structural log compliance logger implementation.
 
 ## Features
 
-- Stack Parse: Automatically captures and includes stack trace information for enhanced debugging.
-- Caller Records: Provides detailed information about the calling function and file.
-- JSON Format & stdout: Outputs logs in JSON format to stdout for easy parsing and integration with log management tools.
-- Drop-in Replacement for Winston: Can be used as a direct replacement for the popular Winston logger.
-- Best Practices for Structural Logging: Implements industry best practices for structured logging.
-- Intuitive API: Simple and easy-to-use API for quick integration into your projects.
+- 🛠️ Stack Parse: Automatically captures and includes stack trace information for enhanced debugging.
+- 📞 Caller Records: Provides detailed information about the calling function and file.
+- 🗄️ JSON Format & stdout: Outputs logs in JSON format to stdout for easy parsing and integration with log management tools.
+- 🔄 Drop-in Replacement for Winston: Can be used as a direct replacement for the popular Winston logger.
+- 📏 Best Practices for Structural Logging: Implements industry best practices for structured logging.
+- 🧩 Intuitive API: Simple and easy-to-use API for quick integration into your projects.
+
+## Preview
+<img width="817" alt="image" src="https://github.com/user-attachments/assets/1cd7efb2-2257-409b-8011-7de69320f2be">
 
 ## Installation
 
 ```bash
-npm install logg
+npm install @guiiai/logg
 ```
 
 ## Usage
 
 ```javascript
-const { createLogg } = require('logg');
+import { createLogg } from '@guiiai/logg'
 
 // Create a logger instance with a specific context
-const log = createLogg('http/request').useGlobalConfig();
+const log = createLogg('http/request').useGlobalConfig()
 
 // Log a 404 error with additional fields
 log
   .withField('requestId', req.id)
   .withField('url', req.url)
-  .error('Resource not found (404)');
+  .error('Resource not found (404)')
 ```
 
 ## API
@@ -73,3 +76,5 @@ log
 - `LogLevel`: Enum for log levels (`Error`, `Warning`, `Log`, `Verbose`, `Debug`).
 - `LogLevelString`: Enum for log level strings (`error`, `warn`, `log`, `verbose`, `debug`).
 - `Format`: Enum for log formats (`JSON`, `Pretty`).
+
+## Made with ❤
