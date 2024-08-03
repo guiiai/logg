@@ -1,13 +1,4 @@
-import type {
-  Color,
-} from 'colorette'
-import {
-  blue,
-  cyan,
-  green,
-  red,
-  yellow,
-} from 'colorette'
+import chalk, { type ChalkInstance } from 'chalk'
 
 import { Format, LogLevel, LogLevelString } from './types'
 
@@ -35,12 +26,12 @@ export const availableLogLevelStrings: LogLevelString[] = [
   LogLevelString.Debug,
 ]
 
-export const logLevelToChalkColorMap: Record<LogLevel, Color> = {
-  [LogLevel.Error]: red,
-  [LogLevel.Warning]: yellow,
-  [LogLevel.Log]: blue,
-  [LogLevel.Verbose]: cyan,
-  [LogLevel.Debug]: green,
+export const logLevelToChalkColorMap: Record<LogLevel, ChalkInstance> = {
+  [LogLevel.Error]: chalk.red,
+  [LogLevel.Warning]: chalk.yellow,
+  [LogLevel.Log]: chalk.blue,
+  [LogLevel.Verbose]: chalk.cyan,
+  [LogLevel.Debug]: chalk.green,
 }
 
 export const availableLogLevels: LogLevel[] = [
