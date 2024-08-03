@@ -1,4 +1,4 @@
-import { gray, green, magenta, yellow } from 'colorette'
+import { gray, green, isColorSupported, magenta, yellow } from 'colorette'
 
 import { logLevelStringToLogLevelMap, logLevelToChalkColorMap } from './constants'
 import type { Log, LogLevelString } from './types'
@@ -67,6 +67,11 @@ export function newErrorLog(logLevel: LogLevelString, context: string, fields: R
 }
 
 export function toPrettyString(log: Log): string {
+  // Disable colors if not supported
+  if (!isColorSupported) {
+    return JSON.stringify(log)
+  }
+
   const messagePartials: string[] = []
 
   messagePartials.push(log['@timestamp'])
