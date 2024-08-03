@@ -1,4 +1,4 @@
-import { gray, green, isColorSupported, magenta, yellow } from 'colorette'
+import chalk from 'chalk'
 
 import { logLevelStringToLogLevelMap, logLevelToChalkColorMap } from './constants'
 import type { Log, LogLevelString } from './types'
@@ -67,11 +67,6 @@ export function newErrorLog(logLevel: LogLevelString, context: string, fields: R
 }
 
 export function toPrettyString(log: Log): string {
-  // Disable colors if not supported
-  if (!isColorSupported) {
-    return JSON.stringify(log)
-  }
-
   const messagePartials: string[] = []
 
   messagePartials.push(log['@timestamp'])
@@ -83,19 +78,19 @@ export function toPrettyString(log: Log): string {
 
   let contextString = ''
   if (log.fields.isNestSystemModule != null) {
-    contextString = magenta(`[${log.fields.nestSystemModule}]`)
+    contextString = chalk.magenta(`[${log.fields.nestSystemModule}]`)
     delete log.fields.isNestSystemModule
     delete log.fields.nestSystemModule
   }
   if (log.fields.context != null) {
-    contextString = magenta(`[${log.fields.context}]`)
+    contextString = chalk.magenta(`[${log.fields.context}]`)
     delete log.fields.context
   }
   if (contextString.length > 0) {
     messagePartials.push(contextString)
   }
   if ('module' in log.fields && log.fields.module != null) {
-    messagePartials.push(magenta(`[${log.fields.module}]`))
+    messagePartials.push(chalk.magenta(`[${log.fields.module}]`))
     delete log.fields.module
   }
 
@@ -127,16 +122,16 @@ export function toPrettyString(log: Log): string {
     else {
       switch (typeof value) {
         case 'number':
-          valueString = yellow(value)
+          valueString = chalk.yellow(value)
           break
         case 'object':
-          valueString = green(JSON.stringify(value))
+          valueString = chalk.green(JSON.stringify(value))
           break
         case 'boolean':
-          valueString = yellow(String(value))
+          valueString = chalk.yellow(String(value))
           break
         case 'undefined':
-          valueString = gray('undefined')
+          valueString = chalk.gray('undefined')
           break
         default:
           valueString = String(value)
@@ -144,7 +139,7 @@ export function toPrettyString(log: Log): string {
       }
     }
 
-    messagePartials.push(`${gray(key)}${gray('=')}${valueString}`)
+    messagePartials.push(`${chalk.gray(key)}${chalk.gray('=')}${valueString}`)
   }
 
   if (fieldsEntries.length > 0) {
