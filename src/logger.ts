@@ -338,20 +338,22 @@ export function createLogg(context: string): Logger {
         return logObj.withField('error', String(err))
       }
 
-      logObj.withField('error', err.message)
+      let logger = logObj as Logger
+
+      logger = logger.withField('error', err.message)
       if (err.stack != null) {
-        logObj.withField('stack', err.stack)
+        logger = logger.withField('stack', err.stack)
       }
       if (err.cause != null) {
         try {
-          logObj.withField('cause', JSON.stringify(err.cause))
+          logger = logger.withField('cause', JSON.stringify(err.cause))
         }
-        catch (_) {
-          logObj.withField('cause', String(err.cause))
+        catch {
+          logger = logger.withField('cause', String(err.cause))
         }
       }
 
-      return logObj
+      return logger
     },
 
     withCallStack(errorLike: { message: string, stack?: string }): Logger {

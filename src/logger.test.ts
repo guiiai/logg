@@ -30,4 +30,13 @@ describe('logger', () => {
     const format = getGlobalFormat()
     expect(format).toBe(Format.JSON)
   })
+
+  it('should be able to log error with stack', () => {
+    setGlobalLogLevel(LogLevel.Verbose)
+    setGlobalFormat(Format.Pretty)
+    const logger = useLogg('main').useGlobalConfig()
+
+    const error = new Error('This is an error')
+    logger.errorWithError('test', error)
+  })
 })
