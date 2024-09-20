@@ -1,7 +1,7 @@
 {
   "name": "@guiiai/logg",
   "type": "module",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "packageManager": "pnpm@9.6.0",
   "description": "Yet another simple, nearly zero dependency, structural log compliance logger implementation.",
   "contributors": [
@@ -16,6 +16,13 @@
   ],
   "license": "MIT",
   "repository": "https://github.com/guiiai/logg",
+  "keywords": [
+    "logger",
+    "nodejs",
+    "javascript",
+    "typescript",
+    "guiiai"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
