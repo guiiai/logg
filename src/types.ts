@@ -21,6 +21,7 @@ export enum Format {
 
 export interface Log {
   '@timestamp': string
+  '@localetime': string
   'level': LogLevelString
   'fields': {
     context?: string
