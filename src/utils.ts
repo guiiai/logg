@@ -47,6 +47,7 @@ export function newLog(logLevel: LogLevelString, context: string, fields: Record
 
   const raw: Log = {
     '@timestamp': new Date().toISOString(),
+    '@localetime': new Date().toLocaleString(),
     'level': logLevel,
     'fields': fieldsObj,
     'message': messageString,
@@ -69,7 +70,7 @@ export function newErrorLog(logLevel: LogLevelString, context: string, fields: R
 export function toPrettyString(log: Log): string {
   const messagePartials: string[] = []
 
-  messagePartials.push(log['@timestamp'])
+  messagePartials.push(log['@localetime'])
   messagePartials.push(
     logLevelToChalkColorMap[logLevelStringToLogLevelMap[log.level]](
       `[${log.level}]`,
