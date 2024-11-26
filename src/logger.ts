@@ -394,6 +394,21 @@ export function createLogg(context: string): Logger {
         ...optionalParams,
       )
 
+      if (typeof window !== 'undefined') {
+        if (Object.keys(logObj.fields).length > 0) {
+          // eslint-disable-next-line no-console
+          console.groupCollapsed(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
+          // eslint-disable-next-line no-console
+          console.debug(logObj.fields)
+          // eslint-disable-next-line no-console
+          console.groupEnd()
+        } else {
+          // eslint-disable-next-line no-console
+          console.debug(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
+        }
+        return
+      }
+
       switch (format) {
         case Format.JSON:
           // eslint-disable-next-line no-console
@@ -434,6 +449,18 @@ export function createLogg(context: string): Logger {
         ...optionalParams,
       )
 
+      if (typeof window !== 'undefined') {
+        // eslint-disable-next-line no-console
+        console.groupCollapsed(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
+        if (Object.keys(logObj.fields).length > 0) {
+          // eslint-disable-next-line no-console
+          console.log(logObj.fields)
+        }
+        // eslint-disable-next-line no-console
+        console.groupEnd()
+        return
+      }
+
       switch (format) {
         case Format.JSON:
           // eslint-disable-next-line no-console
@@ -473,6 +500,18 @@ export function createLogg(context: string): Logger {
         // eslint-disable-next-line ts/no-unsafe-argument
         ...optionalParams,
       )
+
+      if (typeof window !== 'undefined') {
+        // eslint-disable-next-line no-console
+        console.groupCollapsed(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
+        if (Object.keys(logObj.fields).length > 0) {
+          // eslint-disable-next-line no-console
+          console.log(logObj.fields)
+        }
+        // eslint-disable-next-line no-console
+        console.groupEnd()
+        return
+      }
 
       switch (format) {
         case Format.JSON:
@@ -515,14 +554,29 @@ export function createLogg(context: string): Logger {
         ...optionalParams,
       )
 
+      if (typeof window !== 'undefined') {
+        // eslint-disable-next-line no-console
+        console.groupCollapsed(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
+        if (Object.keys(logObj.fields).length > 0) {
+          // eslint-disable-next-line no-console
+          console.error(logObj.fields)
+        }
+        // eslint-disable-next-line no-console
+        console.groupEnd()
+        return
+      }
+
       switch (format) {
         case Format.JSON:
+          // eslint-disable-next-line no-console
           console.error(JSON.stringify(raw))
           break
         case Format.Pretty:
+          // eslint-disable-next-line no-console
           console.error(toPrettyString(raw))
           break
         default:
+          // eslint-disable-next-line no-console
           console.error(JSON.stringify(raw))
           break
       }
@@ -557,14 +611,29 @@ export function createLogg(context: string): Logger {
         ...optionalParams,
       )
 
+      if (typeof window !== 'undefined') {
+        // eslint-disable-next-line no-console
+        console.groupCollapsed(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
+        if (Object.keys(logObj.fields).length > 0) {
+          // eslint-disable-next-line no-console
+          console.warn(logObj.fields)
+        }
+        // eslint-disable-next-line no-console
+        console.groupEnd()
+        return
+      }
+
       switch (format) {
         case Format.JSON:
+          // eslint-disable-next-line no-console
           console.warn(JSON.stringify(raw))
           break
         case Format.Pretty:
+          // eslint-disable-next-line no-console
           console.warn(toPrettyString(raw))
           break
         default:
+          // eslint-disable-next-line no-console
           console.warn(JSON.stringify(raw))
           break
       }
