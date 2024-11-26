@@ -397,7 +397,7 @@ export function createLogg(context: string): Logger {
       if (typeof window !== 'undefined') {
         if (Object.keys(logObj.fields).length > 0) {
           // eslint-disable-next-line no-console
-          console.groupCollapsed(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
+          console.group(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
           // eslint-disable-next-line no-console
           console.debug(logObj.fields)
           // eslint-disable-next-line no-console
@@ -451,7 +451,7 @@ export function createLogg(context: string): Logger {
 
       if (typeof window !== 'undefined') {
         // eslint-disable-next-line no-console
-        console.groupCollapsed(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
+        console.group(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
         if (Object.keys(logObj.fields).length > 0) {
           // eslint-disable-next-line no-console
           console.log(logObj.fields)
@@ -503,7 +503,7 @@ export function createLogg(context: string): Logger {
 
       if (typeof window !== 'undefined') {
         // eslint-disable-next-line no-console
-        console.groupCollapsed(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
+        console.group(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
         if (Object.keys(logObj.fields).length > 0) {
           // eslint-disable-next-line no-console
           console.log(logObj.fields)
@@ -556,7 +556,7 @@ export function createLogg(context: string): Logger {
 
       if (typeof window !== 'undefined') {
         // eslint-disable-next-line no-console
-        console.groupCollapsed(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
+        console.group(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
         if (Object.keys(logObj.fields).length > 0) {
           // eslint-disable-next-line no-console
           console.error(logObj.fields)
@@ -613,7 +613,7 @@ export function createLogg(context: string): Logger {
 
       if (typeof window !== 'undefined') {
         // eslint-disable-next-line no-console
-        console.groupCollapsed(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
+        console.group(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
         if (Object.keys(logObj.fields).length > 0) {
           // eslint-disable-next-line no-console
           console.warn(logObj.fields)

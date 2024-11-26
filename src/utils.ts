@@ -1,8 +1,11 @@
 import chalk from 'chalk'
 
 import { logLevelStringToLogLevelMap, logLevelToChalkColorMap } from './constants'
-import type { Log, LogLevelString } from './types'
+import type { Log, LogLevelString, LoggerConfig } from './types'
 import { LogLevel } from './types'
+
+// Force enable colors even in non-TTY environments
+chalk.level = 3
 
 export interface ErrorLike {
   message: string
@@ -173,4 +176,10 @@ export function shouldOutputWarningLevelLogWhenLogLevelIsOneOf(logLevel: LogLeve
 
 export function shouldOutputErrorLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean {
   return logLevel >= LogLevel.Error
+}
+
+export function initializeLogger(config?: LoggerConfig) {
+  if (config?.forceColors) {
+    chalk.level = 3
+  }
 }

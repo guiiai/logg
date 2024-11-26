@@ -35,3 +35,7 @@ export interface Log {
     stack?: string
   }
 }
+
+export interface LoggerConfig {
+  forceColors?: boolean
+}
