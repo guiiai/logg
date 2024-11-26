@@ -1,6 +1,6 @@
 import chalk from 'chalk'
-
-import { logLevelStringToLogLevelMap, logLevelToChalkColorMap } from './constants'
+import { format, formatISO } from 'date-fns'
+import { DEFAULT_TIME_FORMAT, logLevelStringToLogLevelMap, logLevelToChalkColorMap } from './constants'
 import type { Log, LogLevelString, LoggerConfig } from './types'
 import { LogLevel } from './types'
 
@@ -29,7 +29,15 @@ export function isErrorLike(err: unknown): err is ErrorLike {
   return false
 }
 
-export function newLog(logLevel: LogLevelString, context: string, fields: Record<string, any>, message: string, ...optionalParams: [...any, string?]): Log {
+export function newLog(
+  logLevel: LogLevelString,
+  context: string,
+  fields: Record<string, any>,
+  message: string,
+  // eslint-disable-next-line ts/no-unsafe-assignment
+  timeFormat: string = DEFAULT_TIME_FORMAT,
+  ...optionalParams: [...any, string?]
+): Log {
   let fieldsObj: { context?: string, [key: string]: any } = { context: '' }
 
   if (typeof fields !== 'undefined' && fields !== null) {
@@ -49,8 +57,8 @@ export function newLog(logLevel: LogLevelString, context: string, fields: Record
   }
 
   const raw: Log = {
-    '@timestamp': new Date().toISOString(),
-    '@localetime': new Date().toLocaleString(),
+    '@timestamp': formatISO(new Date()),
+    '@localetime': format(new Date(), timeFormat),
     'level': logLevel,
     'fields': fieldsObj,
     'message': messageString,
@@ -59,9 +67,18 @@ export function newLog(logLevel: LogLevelString, context: string, fields: Record
   return raw
 }
 
-export function newErrorLog(logLevel: LogLevelString, context: string, fields: Record<string, any>, message: string, errorStack?: string, ...optionalParams: [...any, string?]): Log {
+export function newErrorLog(
+  logLevel: LogLevelString,
+  context: string,
+  fields: Record<string, any>,
+  message: string,
+  errorStack?: string,
+  // eslint-disable-next-line ts/no-unsafe-assignment
+  timeFormat: string = DEFAULT_TIME_FORMAT,
+  ...optionalParams: [...any, string?]
+): Log {
   // eslint-disable-next-line ts/no-unsafe-argument
-  const log = newLog(logLevel, context, fields, message, ...optionalParams)
+  const log = newLog(logLevel, context, fields, message, timeFormat, ...optionalParams)
   if (typeof errorStack !== 'undefined' && errorStack !== null) {
     log.errored = true
     log.error = { stack: errorStack }

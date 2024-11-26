@@ -43,3 +43,5 @@ export const availableLogLevels: LogLevel[] = [
 ]
 
 export const availableFormats: Format[] = [Format.JSON, Format.Pretty]
+
+export const DEFAULT_TIME_FORMAT = 'yyyy-MM-dd HH:mm:ss'

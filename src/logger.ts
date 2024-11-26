@@ -1,5 +1,6 @@
 import { Format, LogLevel, LogLevelString } from './types'
 import {
+  DEFAULT_TIME_FORMAT,
   availableFormats,
   availableLogLevelStrings,
   availableLogLevels,
@@ -23,6 +24,8 @@ const GLOBAL_CONFIG = {
   configured: false,
   logLevel: LogLevel.Debug,
   format: Format.JSON,
+  // eslint-disable-next-line ts/no-unsafe-assignment
+  timeFormat: DEFAULT_TIME_FORMAT,
 }
 
 export function getGlobalLogLevel(): LogLevel {
@@ -80,6 +83,16 @@ export function setGlobalFormat(format: Format): void {
   }
 
   GLOBAL_CONFIG.configured = true
+}
+
+export function setGlobalTimeFormat(timeFormat: string): void {
+  GLOBAL_CONFIG.timeFormat = timeFormat
+  GLOBAL_CONFIG.configured = true
+}
+
+export function getGlobalTimeFormat(): string {
+  // eslint-disable-next-line ts/no-unsafe-return
+  return GLOBAL_CONFIG.timeFormat
 }
 
 interface Logger {
@@ -205,6 +218,11 @@ interface Logger {
    * @returns
    */
   warn: (message: any, ...optionalParams: [...any, string?]) => void
+  /**
+   * Sets the time format for log timestamps
+   * @param format - date-fns compatible format string
+   */
+  withTimeFormat: (format: string) => Logger
 }
 
 interface InternalLogger extends Logger {
@@ -213,6 +231,7 @@ interface InternalLogger extends Logger {
   logLevel: LogLevel
   format: Format
   shouldUseGlobalConfig: boolean
+  timeFormat: string
 }
 
 export function createLogg(context: string): Logger {
@@ -222,6 +241,8 @@ export function createLogg(context: string): Logger {
     logLevel: LogLevel.Debug,
     format: Format.JSON,
     shouldUseGlobalConfig: false,
+    // eslint-disable-next-line ts/no-unsafe-assignment
+    timeFormat: DEFAULT_TIME_FORMAT,
     useGlobalConfig: (): Logger => {
       logObj.shouldUseGlobalConfig = true
       logObj.format = getGlobalFormat()
@@ -390,6 +411,7 @@ export function createLogg(context: string): Logger {
         logObj.fields,
         // eslint-disable-next-line ts/no-unsafe-argument
         message,
+        logObj.shouldUseGlobalConfig ? getGlobalTimeFormat() : logObj.timeFormat,
         // eslint-disable-next-line ts/no-unsafe-argument
         ...optionalParams,
       )
@@ -402,7 +424,8 @@ export function createLogg(context: string): Logger {
           console.debug(logObj.fields)
           // eslint-disable-next-line no-console
           console.groupEnd()
-        } else {
+        }
+        else {
           // eslint-disable-next-line no-console
           console.debug(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
         }
@@ -445,6 +468,7 @@ export function createLogg(context: string): Logger {
         logObj.fields,
         // eslint-disable-next-line ts/no-unsafe-argument
         message,
+        logObj.shouldUseGlobalConfig ? getGlobalTimeFormat() : logObj.timeFormat,
         // eslint-disable-next-line ts/no-unsafe-argument
         ...optionalParams,
       )
@@ -497,6 +521,7 @@ export function createLogg(context: string): Logger {
         logObj.fields,
         // eslint-disable-next-line ts/no-unsafe-argument
         message,
+        logObj.shouldUseGlobalConfig ? getGlobalTimeFormat() : logObj.timeFormat,
         // eslint-disable-next-line ts/no-unsafe-argument
         ...optionalParams,
       )
@@ -550,6 +575,7 @@ export function createLogg(context: string): Logger {
         // eslint-disable-next-line ts/no-unsafe-argument
         message,
         stack,
+        logObj.shouldUseGlobalConfig ? getGlobalTimeFormat() : logObj.timeFormat,
         // eslint-disable-next-line ts/no-unsafe-argument
         ...optionalParams,
       )
@@ -558,7 +584,6 @@ export function createLogg(context: string): Logger {
         // eslint-disable-next-line no-console
         console.group(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
         if (Object.keys(logObj.fields).length > 0) {
-          // eslint-disable-next-line no-console
           console.error(logObj.fields)
         }
         // eslint-disable-next-line no-console
@@ -568,15 +593,15 @@ export function createLogg(context: string): Logger {
 
       switch (format) {
         case Format.JSON:
-          // eslint-disable-next-line no-console
+
           console.error(JSON.stringify(raw))
           break
         case Format.Pretty:
-          // eslint-disable-next-line no-console
+
           console.error(toPrettyString(raw))
           break
         default:
-          // eslint-disable-next-line no-console
+
           console.error(JSON.stringify(raw))
           break
       }
@@ -607,6 +632,7 @@ export function createLogg(context: string): Logger {
         logObj.fields,
         // eslint-disable-next-line ts/no-unsafe-argument
         message,
+        logObj.shouldUseGlobalConfig ? getGlobalTimeFormat() : logObj.timeFormat,
         // eslint-disable-next-line ts/no-unsafe-argument
         ...optionalParams,
       )
@@ -615,7 +641,6 @@ export function createLogg(context: string): Logger {
         // eslint-disable-next-line no-console
         console.group(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
         if (Object.keys(logObj.fields).length > 0) {
-          // eslint-disable-next-line no-console
           console.warn(logObj.fields)
         }
         // eslint-disable-next-line no-console
@@ -625,18 +650,24 @@ export function createLogg(context: string): Logger {
 
       switch (format) {
         case Format.JSON:
-          // eslint-disable-next-line no-console
+
           console.warn(JSON.stringify(raw))
           break
         case Format.Pretty:
-          // eslint-disable-next-line no-console
+
           console.warn(toPrettyString(raw))
           break
         default:
-          // eslint-disable-next-line no-console
+
           console.warn(JSON.stringify(raw))
           break
       }
+    },
+
+    withTimeFormat: (format: string): Logger => {
+      const logger = logObj.child() as InternalLogger
+      logger.timeFormat = format
+      return logger
     },
   }
 

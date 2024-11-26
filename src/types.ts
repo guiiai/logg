@@ -38,4 +38,5 @@ export interface Log {
 
 export interface LoggerConfig {
   forceColors?: boolean
+  timeFormat?: string
 }
