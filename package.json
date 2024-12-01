@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "2.21",
+    "bumpp": "^9.8.1",
     "eslint": "8",
     "unbuild": "^2.0.0",
     "vitest": "^2.1.6"
