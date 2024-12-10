@@ -1,5 +1,4 @@
 import pc from 'picocolors'
-import { format } from 'date-fns'
 import { DEFAULT_TIME_FORMAT, logLevelStringToLogLevelMap, logLevelToColorMap } from './constants'
 import type { Log, LogLevelString } from './types'
 import { LogLevel } from './types'
@@ -31,7 +30,6 @@ export function newLog(
   context: string,
   fields: Record<string, any>,
   message: string,
-  timeFormat: string = DEFAULT_TIME_FORMAT,
   ...optionalParams: [...any, string?]
 ): Log {
   let fieldsObj: { context?: string, [key: string]: any } = { context: '' }
@@ -53,9 +51,8 @@ export function newLog(
   }
 
   const raw: Log = {
-    '@timestamp': new Date().toISOString(),
-    // eslint-disable-next-line ts/no-unsafe-assignment, ts/no-unsafe-call
-    '@localetime': format(new Date(), timeFormat),
+    '@timestamp': Date.now(),
+    '@localetime': new Date().toISOString(),
     'level': logLevel,
     'fields': fieldsObj,
     'message': messageString,
