@@ -1,7 +1,7 @@
 import pc from 'picocolors'
 import { format } from 'date-fns'
 import { DEFAULT_TIME_FORMAT, logLevelStringToLogLevelMap, logLevelToColorMap } from './constants'
-import type { Log, LogLevelString, LoggerConfig } from './types'
+import type { Log, LogLevelString } from './types'
 import { LogLevel } from './types'
 
 export interface ErrorLike {
@@ -54,6 +54,7 @@ export function newLog(
 
   const raw: Log = {
     '@timestamp': new Date().toISOString(),
+    // eslint-disable-next-line ts/no-unsafe-assignment, ts/no-unsafe-call
     '@localetime': format(new Date(), timeFormat),
     'level': logLevel,
     'fields': fieldsObj,
@@ -188,10 +189,4 @@ export function shouldOutputWarningLevelLogWhenLogLevelIsOneOf(logLevel: LogLeve
 
 export function shouldOutputErrorLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel): boolean {
   return logLevel >= LogLevel.Error
-}
-
-export function initializeLogger(config?: LoggerConfig) {
-  if (config?.forceColors) {
-    // chalk.level = 3
-  }
 }
