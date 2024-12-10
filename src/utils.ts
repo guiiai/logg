@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import { format, formatISO } from 'date-fns'
+import { format } from 'date-fns'
 import { DEFAULT_TIME_FORMAT, logLevelStringToLogLevelMap, logLevelToChalkColorMap } from './constants'
 import type { Log, LogLevelString, LoggerConfig } from './types'
 import { LogLevel } from './types'
@@ -57,7 +57,7 @@ export function newLog(
   }
 
   const raw: Log = {
-    '@timestamp': formatISO(new Date()),
+    '@timestamp': new Date().toISOString(),
     '@localetime': format(new Date(), timeFormat),
     'level': logLevel,
     'fields': fieldsObj,
