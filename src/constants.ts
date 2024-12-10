@@ -1,6 +1,8 @@
-import chalk, { type ChalkInstance } from 'chalk'
+import pc from 'picocolors'
 
 import { Format, LogLevel, LogLevelString } from './types'
+
+type PicoColorsFormatter = (input: string | number | null | undefined) => string
 
 export const logLevelStringToLogLevelMap: Record<LogLevelString, LogLevel> = {
   [LogLevelString.Error]: LogLevel.Error,
@@ -26,12 +28,12 @@ export const availableLogLevelStrings: LogLevelString[] = [
   LogLevelString.Debug,
 ]
 
-export const logLevelToChalkColorMap: Record<LogLevel, ChalkInstance> = {
-  [LogLevel.Error]: chalk.red,
-  [LogLevel.Warning]: chalk.yellow,
-  [LogLevel.Log]: chalk.blue,
-  [LogLevel.Verbose]: chalk.cyan,
-  [LogLevel.Debug]: chalk.green,
+export const logLevelToColorMap: Record<LogLevel, PicoColorsFormatter> = {
+  [LogLevel.Error]: pc.red,
+  [LogLevel.Warning]: pc.yellow,
+  [LogLevel.Log]: pc.blue,
+  [LogLevel.Verbose]: pc.cyan,
+  [LogLevel.Debug]: pc.green,
 }
 
 export const availableLogLevels: LogLevel[] = [

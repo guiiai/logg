@@ -24,7 +24,6 @@ const GLOBAL_CONFIG = {
   configured: false,
   logLevel: LogLevel.Debug,
   format: Format.JSON,
-  // eslint-disable-next-line ts/no-unsafe-assignment
   timeFormat: DEFAULT_TIME_FORMAT,
 }
 
@@ -91,7 +90,6 @@ export function setGlobalTimeFormat(timeFormat: string): void {
 }
 
 export function getGlobalTimeFormat(): string {
-  // eslint-disable-next-line ts/no-unsafe-return
   return GLOBAL_CONFIG.timeFormat
 }
 
@@ -241,7 +239,7 @@ export function createLogg(context: string): Logger {
     logLevel: LogLevel.Debug,
     format: Format.JSON,
     shouldUseGlobalConfig: false,
-    // eslint-disable-next-line ts/no-unsafe-assignment
+
     timeFormat: DEFAULT_TIME_FORMAT,
     useGlobalConfig: (): Logger => {
       logObj.shouldUseGlobalConfig = true

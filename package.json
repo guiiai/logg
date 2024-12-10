@@ -40,16 +40,15 @@
     "package:publish": "pnpm build && pnpm publish --access public --no-git-checks",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:run": "vitest run"
-  },
-  "dependencies": {
-    "chalk": "^5.3.0",
-    "date-fns": "^4.1.0"
+    "test:run": "vitest run",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@antfu/eslint-config": "2.21",
     "bumpp": "^9.8.1",
     "eslint": "8",
+    "picocolors": "^1.1.1",
+    "typescript": "^5.7.2",
     "unbuild": "^2.0.0",
     "vitest": "^2.1.6"
   }
