@@ -1,11 +1,8 @@
-import chalk from 'chalk'
+import pc from 'picocolors'
 import { format } from 'date-fns'
-import { DEFAULT_TIME_FORMAT, logLevelStringToLogLevelMap, logLevelToChalkColorMap } from './constants'
+import { DEFAULT_TIME_FORMAT, logLevelStringToLogLevelMap, logLevelToColorMap } from './constants'
 import type { Log, LogLevelString, LoggerConfig } from './types'
 import { LogLevel } from './types'
-
-// Force enable colors even in non-TTY environments
-chalk.level = 3
 
 export interface ErrorLike {
   message: string
@@ -34,7 +31,6 @@ export function newLog(
   context: string,
   fields: Record<string, any>,
   message: string,
-  // eslint-disable-next-line ts/no-unsafe-assignment
   timeFormat: string = DEFAULT_TIME_FORMAT,
   ...optionalParams: [...any, string?]
 ): Log {
@@ -73,7 +69,6 @@ export function newErrorLog(
   fields: Record<string, any>,
   message: string,
   errorStack?: string,
-  // eslint-disable-next-line ts/no-unsafe-assignment
   timeFormat: string = DEFAULT_TIME_FORMAT,
   ...optionalParams: [...any, string?]
 ): Log {
@@ -92,26 +87,26 @@ export function toPrettyString(log: Log): string {
 
   messagePartials.push(log['@localetime'])
   messagePartials.push(
-    logLevelToChalkColorMap[logLevelStringToLogLevelMap[log.level]](
+    logLevelToColorMap[logLevelStringToLogLevelMap[log.level]](
       `[${log.level}]`,
     ),
   )
 
   let contextString = ''
   if (log.fields.isNestSystemModule != null) {
-    contextString = chalk.magenta(`[${log.fields.nestSystemModule}]`)
+    contextString = pc.magenta(`[${log.fields.nestSystemModule}]`)
     delete log.fields.isNestSystemModule
     delete log.fields.nestSystemModule
   }
   if (log.fields.context != null) {
-    contextString = chalk.magenta(`[${log.fields.context}]`)
+    contextString = pc.magenta(`[${log.fields.context}]`)
     delete log.fields.context
   }
   if (contextString.length > 0) {
     messagePartials.push(contextString)
   }
   if ('module' in log.fields && log.fields.module != null) {
-    messagePartials.push(chalk.magenta(`[${log.fields.module}]`))
+    messagePartials.push(pc.magenta(`[${log.fields.module}]`))
     delete log.fields.module
   }
 
@@ -143,16 +138,16 @@ export function toPrettyString(log: Log): string {
     else {
       switch (typeof value) {
         case 'number':
-          valueString = chalk.yellow(value)
+          valueString = pc.yellow(value)
           break
         case 'object':
-          valueString = chalk.green(JSON.stringify(value))
+          valueString = pc.green(JSON.stringify(value))
           break
         case 'boolean':
-          valueString = chalk.yellow(String(value))
+          valueString = pc.yellow(String(value))
           break
         case 'undefined':
-          valueString = chalk.gray('undefined')
+          valueString = pc.gray('undefined')
           break
         default:
           valueString = String(value)
@@ -160,7 +155,7 @@ export function toPrettyString(log: Log): string {
       }
     }
 
-    messagePartials.push(`${chalk.gray(key)}${chalk.gray('=')}${valueString}`)
+    messagePartials.push(`${pc.gray(key)}${pc.gray('=')}${valueString}`)
   }
 
   if (fieldsEntries.length > 0) {
@@ -197,6 +192,6 @@ export function shouldOutputErrorLevelLogWhenLogLevelIsOneOf(logLevel: LogLevel)
 
 export function initializeLogger(config?: LoggerConfig) {
   if (config?.forceColors) {
-    chalk.level = 3
+    // chalk.level = 3
   }
 }
