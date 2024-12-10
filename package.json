@@ -2,7 +2,7 @@
   "name": "@guiiai/logg",
   "type": "module",
   "version": "1.0.6",
-  "packageManager": "pnpm@9.14.4",
+  "packageManager": "pnpm@9.15.0",
   "description": "Yet another simple, nearly zero dependency, structural log compliance logger implementation.",
   "contributors": [
     {
@@ -45,11 +45,11 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "2.21",
-    "bumpp": "^9.8.1",
+    "bumpp": "^9.9.0",
     "eslint": "8",
     "picocolors": "^1.1.1",
     "typescript": "^5.7.2",
     "unbuild": "^2.0.0",
-    "vitest": "^2.1.6"
+    "vitest": "^2.1.8"
   }
 }
