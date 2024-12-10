@@ -1,6 +1,5 @@
 import { Format, LogLevel, LogLevelString } from './types'
 import {
-  DEFAULT_TIME_FORMAT,
   availableFormats,
   availableLogLevelStrings,
   availableLogLevels,
@@ -24,7 +23,7 @@ const GLOBAL_CONFIG = {
   configured: false,
   logLevel: LogLevel.Debug,
   format: Format.JSON,
-  timeFormat: DEFAULT_TIME_FORMAT,
+  timeFormatter: (inputDate: Date) => inputDate.toISOString(),
 }
 
 export function getGlobalLogLevel(): LogLevel {
@@ -84,13 +83,13 @@ export function setGlobalFormat(format: Format): void {
   GLOBAL_CONFIG.configured = true
 }
 
-export function setGlobalTimeFormat(timeFormat: string): void {
-  GLOBAL_CONFIG.timeFormat = timeFormat
+export function setGlobalTimeFormatter(fn: (inputDate: Date) => string): void {
+  GLOBAL_CONFIG.timeFormatter = fn
   GLOBAL_CONFIG.configured = true
 }
 
-export function getGlobalTimeFormat(): string {
-  return GLOBAL_CONFIG.timeFormat
+export function getGlobalTimeFormatter(): (inputDate: Date) => string {
+  return GLOBAL_CONFIG.timeFormatter
 }
 
 interface Logger {
@@ -219,8 +218,14 @@ interface Logger {
   /**
    * Sets the time format for log timestamps
    * @param format - date-fns compatible format string
+   * @deprecated use {@link withTimeFormatter} instead
    */
   withTimeFormat: (format: string) => Logger
+  /**
+   * Set the time formatter for log timestamps to a custom function
+   * @param fn - callback function that takes a Date object and returns a string
+   */
+  withTimeFormatter: (fn: (inputDate: Date) => string) => Logger
 }
 
 interface InternalLogger extends Logger {
@@ -229,7 +234,7 @@ interface InternalLogger extends Logger {
   logLevel: LogLevel
   format: Format
   shouldUseGlobalConfig: boolean
-  timeFormat: string
+  timeFormatter?: (inputDate: Date) => string
 }
 
 export function createLogg(context: string): Logger {
@@ -240,7 +245,7 @@ export function createLogg(context: string): Logger {
     format: Format.JSON,
     shouldUseGlobalConfig: false,
 
-    timeFormat: DEFAULT_TIME_FORMAT,
+    timeFormatter: (inputDate: Date) => inputDate.toISOString(),
     useGlobalConfig: (): Logger => {
       logObj.shouldUseGlobalConfig = true
       logObj.format = getGlobalFormat()
@@ -409,7 +414,7 @@ export function createLogg(context: string): Logger {
         logObj.fields,
         // eslint-disable-next-line ts/no-unsafe-argument
         message,
-        logObj.shouldUseGlobalConfig ? getGlobalTimeFormat() : logObj.timeFormat,
+        logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
         // eslint-disable-next-line ts/no-unsafe-argument
         ...optionalParams,
       )
@@ -466,7 +471,7 @@ export function createLogg(context: string): Logger {
         logObj.fields,
         // eslint-disable-next-line ts/no-unsafe-argument
         message,
-        logObj.shouldUseGlobalConfig ? getGlobalTimeFormat() : logObj.timeFormat,
+        logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
         // eslint-disable-next-line ts/no-unsafe-argument
         ...optionalParams,
       )
@@ -519,7 +524,7 @@ export function createLogg(context: string): Logger {
         logObj.fields,
         // eslint-disable-next-line ts/no-unsafe-argument
         message,
-        logObj.shouldUseGlobalConfig ? getGlobalTimeFormat() : logObj.timeFormat,
+        logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
         // eslint-disable-next-line ts/no-unsafe-argument
         ...optionalParams,
       )
@@ -573,7 +578,7 @@ export function createLogg(context: string): Logger {
         // eslint-disable-next-line ts/no-unsafe-argument
         message,
         stack,
-        logObj.shouldUseGlobalConfig ? getGlobalTimeFormat() : logObj.timeFormat,
+        logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
         // eslint-disable-next-line ts/no-unsafe-argument
         ...optionalParams,
       )
@@ -630,7 +635,7 @@ export function createLogg(context: string): Logger {
         logObj.fields,
         // eslint-disable-next-line ts/no-unsafe-argument
         message,
-        logObj.shouldUseGlobalConfig ? getGlobalTimeFormat() : logObj.timeFormat,
+        logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
         // eslint-disable-next-line ts/no-unsafe-argument
         ...optionalParams,
       )
@@ -662,9 +667,15 @@ export function createLogg(context: string): Logger {
       }
     },
 
-    withTimeFormat: (format: string): Logger => {
+    // TODO: remove in next major release
+    withTimeFormat: (_: string): Logger => {
       const logger = logObj.child() as InternalLogger
-      logger.timeFormat = format
+      return logger
+    },
+
+    withTimeFormatter: (fn: (inputDate: Date) => string): Logger => {
+      const logger = logObj.child() as InternalLogger
+      logger.timeFormatter = fn
       return logger
     },
   }

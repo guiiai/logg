@@ -1,5 +1,5 @@
 import pc from 'picocolors'
-import { DEFAULT_TIME_FORMAT, logLevelStringToLogLevelMap, logLevelToColorMap } from './constants'
+import { logLevelStringToLogLevelMap, logLevelToColorMap } from './constants'
 import type { Log, LogLevelString } from './types'
 import { LogLevel } from './types'
 
@@ -30,6 +30,7 @@ export function newLog(
   context: string,
   fields: Record<string, any>,
   message: string,
+  timeFormatter?: (date: Date) => string,
   ...optionalParams: [...any, string?]
 ): Log {
   let fieldsObj: { context?: string, [key: string]: any } = { context: '' }
@@ -50,9 +51,11 @@ export function newLog(
     messageString = message
   }
 
+  const now = new Date()
+
   const raw: Log = {
-    '@timestamp': Date.now(),
-    '@localetime': new Date().toISOString(),
+    '@timestamp': now.getTime(),
+    '@localetime': timeFormatter ? timeFormatter(now) : now.toISOString(),
     'level': logLevel,
     'fields': fieldsObj,
     'message': messageString,
@@ -67,11 +70,11 @@ export function newErrorLog(
   fields: Record<string, any>,
   message: string,
   errorStack?: string,
-  timeFormat: string = DEFAULT_TIME_FORMAT,
+  timeFormatter?: (date: Date) => string,
   ...optionalParams: [...any, string?]
 ): Log {
   // eslint-disable-next-line ts/no-unsafe-argument
-  const log = newLog(logLevel, context, fields, message, timeFormat, ...optionalParams)
+  const log = newLog(logLevel, context, fields, message, timeFormatter, ...optionalParams)
   if (typeof errorStack !== 'undefined' && errorStack !== null) {
     log.errored = true
     log.error = { stack: errorStack }
