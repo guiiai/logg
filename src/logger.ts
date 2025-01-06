@@ -92,51 +92,51 @@ export function getGlobalTimeFormatter(): (inputDate: Date) => string {
   return GLOBAL_CONFIG.timeFormatter
 }
 
-interface Logger {
+export interface Logg {
   /**
    *
    * @returns Set the logger to use the global configuration.
    */
-  useGlobalConfig: () => Logger
+  useGlobalConfig: () => Logg
   /**
    * Create a child logger with additional fields.
    */
-  child: (fields?: Record<string, any>) => Logger
+  child: (fields?: Record<string, any>) => Logg
   /**
    * Dynamically set the context. A copied clone of the logger is returned.
    *
    * @param context - The context to set, usually the name of the function or module.
    * @returns
    */
-  withContext: (context: string) => Logger
+  withContext: (context: string) => Logg
   /**
    * Dynamically set the log level. A copied clone of the logger is returned.
    *
    * @param logLevel - The log level to set.
    * @returns
    */
-  withLogLevel: (logLevel: LogLevel) => Logger
+  withLogLevel: (logLevel: LogLevel) => Logg
   /**
    * Dynamically set the log level. A copied clone of the logger is returned.
    *
    * @param logLevelString - The log level to set.
    * @returns
    */
-  withLogLevelString: (logLevelString: LogLevelString) => Logger
+  withLogLevelString: (logLevelString: LogLevelString) => Logg
   /**
    * Dynamically set the format. A copied clone of the logger is returned.
    *
    * @param format - The format to set.
    * @returns
    */
-  withFormat: (format: Format) => Logger
+  withFormat: (format: Format) => Logg
   /**
    * Alias for `child()`
    *
    * @param fields - The fields to add to the logger.
    * @returns
    */
-  withFields: (fields: Record<string, any>) => Logger
+  withFields: (fields: Record<string, any>) => Logg
   /**
    * Works like `child()` and `withFields()`, but only adds a single field.
    *
@@ -144,7 +144,7 @@ interface Logger {
    * @param value - The value of the field to add.
    * @returns
    */
-  withField: (key: string, value: any) => Logger
+  withField: (key: string, value: any) => Logg
   /**
    * Works like `child()` and `withField('error', err instanceof Error ? err : String(err))`,
    * but will try to match up the type to determine whether the passed by value is an error
@@ -153,12 +153,12 @@ interface Logger {
    * @param err
    * @returns
    */
-  withError: (err: Error | unknown) => Logger
+  withError: (err: Error | unknown) => Logg
   /**
    * Works like `child()`, but will try to get the call stack and add it to the logger.
    * This is useful for debugging purposes.
    */
-  withCallStack: (errorLike: { message: string, stack?: string }) => Logger
+  withCallStack: (errorLike: { message: string, stack?: string }) => Logg
   /**
    * Write a 'debug' level log, if the configured level allows for it.
    * Prints to `stdout` with newline.
@@ -220,15 +220,15 @@ interface Logger {
    * @param format - date-fns compatible format string
    * @deprecated use {@link withTimeFormatter} instead
    */
-  withTimeFormat: (format: string) => Logger
+  withTimeFormat: (format: string) => Logg
   /**
    * Set the time formatter for log timestamps to a custom function
    * @param fn - callback function that takes a Date object and returns a string
    */
-  withTimeFormatter: (fn: (inputDate: Date) => string) => Logger
+  withTimeFormatter: (fn: (inputDate: Date) => string) => Logg
 }
 
-interface InternalLogger extends Logger {
+interface InternalLogger extends Logg {
   fields: Record<string, any>
   context: string
   logLevel: LogLevel
@@ -237,7 +237,7 @@ interface InternalLogger extends Logger {
   timeFormatter?: (inputDate: Date) => string
 }
 
-export function createLogg(context: string): Logger {
+export function createLogg(context: string): Logg {
   const logObj: InternalLogger = {
     fields: {},
     context,
@@ -246,14 +246,14 @@ export function createLogg(context: string): Logger {
     shouldUseGlobalConfig: false,
 
     timeFormatter: (inputDate: Date) => inputDate.toISOString(),
-    useGlobalConfig: (): Logger => {
+    useGlobalConfig: (): Logg => {
       logObj.shouldUseGlobalConfig = true
       logObj.format = getGlobalFormat()
       logObj.logLevel = getGlobalLogLevel()
 
       return logObj.child()
     },
-    child: (fields?: Record<string, any>): Logger => {
+    child: (fields?: Record<string, any>): Logg => {
       const logger = createLogg(logObj.context) as InternalLogger
 
       if (typeof fields !== 'undefined' || fields !== null) {
@@ -276,13 +276,13 @@ export function createLogg(context: string): Logger {
       return logger
     },
 
-    withContext: (context: string): Logger => {
+    withContext: (context: string): Logg => {
       const logger = logObj.child() as InternalLogger
       logger.context = context
       return logger
     },
 
-    withLogLevel: (logLevel: LogLevel): Logger => {
+    withLogLevel: (logLevel: LogLevel): Logg => {
       const logger = logObj.child() as InternalLogger
 
       if (availableLogLevels.includes(logLevel)) {
@@ -302,7 +302,7 @@ export function createLogg(context: string): Logger {
       return logger
     },
 
-    withLogLevelString: (logLevelString: LogLevelString): Logger => {
+    withLogLevelString: (logLevelString: LogLevelString): Logg => {
       const logger = logObj.child() as InternalLogger
 
       if (availableLogLevelStrings.includes(logLevelString)) {
@@ -322,7 +322,7 @@ export function createLogg(context: string): Logger {
       return logger
     },
 
-    withFormat: (format: Format): Logger => {
+    withFormat: (format: Format): Logg => {
       const logger = logObj.child() as InternalLogger
 
       if (availableFormats.includes(format)) {
@@ -340,7 +340,7 @@ export function createLogg(context: string): Logger {
       return logger
     },
 
-    withFields: (fields: Record<string, any>): Logger => {
+    withFields: (fields: Record<string, any>): Logg => {
       if (typeof fields === 'undefined' || fields === null) {
         return logObj.child({})
       }
@@ -348,7 +348,7 @@ export function createLogg(context: string): Logger {
       return logObj.child(fields)
     },
 
-    withField(key: string, value: any): Logger {
+    withField(key: string, value: any): Logg {
       if (typeof key === 'undefined' || key === null) {
         throw new Error('key is required')
       }
@@ -357,12 +357,12 @@ export function createLogg(context: string): Logger {
       return logObj.child({ [key]: value })
     },
 
-    withError: (err: Error | unknown): Logger => {
+    withError: (err: Error | unknown): Logg => {
       if (!isErrorLike(err)) {
         return logObj.withField('error', String(err))
       }
 
-      let logger = logObj as Logger
+      let logger = logObj as Logg
 
       logger = logger.withField('error', err.message)
       if (err.stack != null) {
@@ -380,7 +380,7 @@ export function createLogg(context: string): Logger {
       return logger
     },
 
-    withCallStack(errorLike: { message: string, stack?: string }): Logger {
+    withCallStack(errorLike: { message: string, stack?: string }): Logg {
       const stacks = parseErrorStacks(errorLike).slice(2).filter(item => !item.invalid)
       if (stacks.length === 0) {
         return logObj
@@ -668,12 +668,12 @@ export function createLogg(context: string): Logger {
     },
 
     // TODO: remove in next major release
-    withTimeFormat: (_: string): Logger => {
+    withTimeFormat: (_: string): Logg => {
       const logger = logObj.child() as InternalLogger
       return logger
     },
 
-    withTimeFormatter: (fn: (inputDate: Date) => string): Logger => {
+    withTimeFormatter: (fn: (inputDate: Date) => string): Logg => {
       const logger = logObj.child() as InternalLogger
       logger.timeFormatter = fn
       return logger
