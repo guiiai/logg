@@ -1,7 +1,7 @@
 {
   "name": "@guiiai/logg",
   "type": "module",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "packageManager": "pnpm@9.15.0",
   "description": "Yet another simple, nearly zero dependency, structural log compliance logger implementation.",
   "contributors": [
