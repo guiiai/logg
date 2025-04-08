@@ -1,4 +1,4 @@
-import pc from 'picocolors'
+import pc from './utils/picocolors'
 import { logLevelStringToLogLevelMap, logLevelToColorMap } from './constants'
 import type { Log, LogLevelString } from './types'
 import { LogLevel } from './types'
