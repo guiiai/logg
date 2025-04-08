@@ -1,4 +1,4 @@
-import pc from 'picocolors'
+import pc from './utils/picocolors'
 
 import { Format, LogLevel, LogLevelString } from './types'
 

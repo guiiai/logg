@@ -4,18 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-patchedDependencies:
-  picocolors:
-    hash: 3odwu46eoa5skpzus35qf4lz7u
-    path: patches/picocolors.patch
-
 importers:
 
   .:
-    dependencies:
-      picocolors:
-        specifier: ^1.1.1
-        version: 1.1.1(patch_hash=3odwu46eoa5skpzus35qf4lz7u)
     devDependencies:
       '@antfu/eslint-config':
         specifier: '2.21'
@@ -2850,7 +2841,7 @@ snapshots:
       jsonc-eslint-parser: 2.4.0
       local-pkg: 0.5.0
       parse-gitignore: 2.0.0
-      picocolors: 1.1.1(patch_hash=3odwu46eoa5skpzus35qf4lz7u)
+      picocolors: 1.1.1
       toml-eslint-parser: 0.10.0
       vue-eslint-parser: 9.4.3(eslint@8.57.0)
       yaml-eslint-parser: 1.2.3
@@ -2871,7 +2862,7 @@ snapshots:
   '@babel/code-frame@7.24.7':
     dependencies:
       '@babel/highlight': 7.24.7
-      picocolors: 1.1.1(patch_hash=3odwu46eoa5skpzus35qf4lz7u)
+      picocolors: 1.1.1
 
   '@babel/compat-data@7.25.2': {}
 
@@ -2950,7 +2941,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       chalk: 2.4.2
       js-tokens: 4.0.0
-      picocolors: 1.1.1(patch_hash=3odwu46eoa5skpzus35qf4lz7u)
+      picocolors: 1.1.1
 
   '@babel/parser@7.25.0':
     dependencies:
@@ -2984,13 +2975,13 @@ snapshots:
 
   '@clack/core@0.3.4':
     dependencies:
-      picocolors: 1.1.1(patch_hash=3odwu46eoa5skpzus35qf4lz7u)
+      picocolors: 1.1.1
       sisteransi: 1.0.5
 
   '@clack/prompts@0.7.0':
     dependencies:
       '@clack/core': 0.3.4
-      picocolors: 1.1.1(patch_hash=3odwu46eoa5skpzus35qf4lz7u)
+      picocolors: 1.1.1
       sisteransi: 1.0.5
 
   '@es-joy/jsdoccomment@0.43.1':
@@ -3707,7 +3698,7 @@ snapshots:
       caniuse-lite: 1.0.30001643
       fraction.js: 4.3.7
       normalize-range: 0.1.2
-      picocolors: 1.1.1(patch_hash=3odwu46eoa5skpzus35qf4lz7u)
+      picocolors: 1.1.1
       postcss: 8.4.40
       postcss-value-parser: 4.2.0
 
@@ -4936,7 +4927,7 @@ snapshots:
 
   perfect-debounce@1.0.0: {}
 
-  picocolors@1.1.1(patch_hash=3odwu46eoa5skpzus35qf4lz7u): {}
+  picocolors@1.1.1: {}
 
   picomatch@2.3.1: {}
 
@@ -5120,7 +5111,7 @@ snapshots:
   postcss@8.4.40:
     dependencies:
       nanoid: 3.3.7
-      picocolors: 1.1.1(patch_hash=3odwu46eoa5skpzus35qf4lz7u)
+      picocolors: 1.1.1
       source-map-js: 1.2.0
 
   prelude-ls@1.2.1: {}
@@ -5330,7 +5321,7 @@ snapshots:
       css-tree: 2.3.1
       css-what: 6.1.0
       csso: 5.0.5
-      picocolors: 1.1.1(patch_hash=3odwu46eoa5skpzus35qf4lz7u)
+      picocolors: 1.1.1
 
   synckit@0.6.2:
     dependencies:
@@ -5454,7 +5445,7 @@ snapshots:
     dependencies:
       browserslist: 4.23.2
       escalade: 3.1.2
-      picocolors: 1.1.1(patch_hash=3odwu46eoa5skpzus35qf4lz7u)
+      picocolors: 1.1.1
 
   uri-js@4.4.1:
     dependencies:

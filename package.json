@@ -43,9 +43,6 @@
     "test:run": "vitest run",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "picocolors": "^1.1.1"
-  },
   "devDependencies": {
     "@antfu/eslint-config": "2.21",
     "bumpp": "^9.9.0",
@@ -53,10 +50,5 @@
     "typescript": "^5.7.2",
     "unbuild": "^2.0.0",
     "vitest": "^2.1.8"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "picocolors": "patches/picocolors.patch"
-    }
   }
 }
