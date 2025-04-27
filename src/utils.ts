@@ -17,11 +17,6 @@ export function isErrorLike(err: unknown): err is ErrorLike {
   if (err instanceof Error) {
     return true
   }
-  if (typeof err === 'object') {
-    if ('message' in err) {
-      return true
-    }
-  }
 
   return false
 }
@@ -84,6 +79,31 @@ export function newErrorLog(
   return log
 }
 
+function prettyFormatValue(value: any): string {
+  let valueString = ''
+
+  // eslint-disable-next-line ts/switch-exhaustiveness-check
+  switch (typeof value) {
+    case 'number':
+      valueString = pc.yellow(value)
+      break
+    case 'object':
+      valueString = pc.green(JSON.stringify(value))
+      break
+    case 'boolean':
+      valueString = pc.yellow(String(value))
+      break
+    case 'undefined':
+      valueString = pc.gray('undefined')
+      break
+    default:
+      valueString = String(value)
+      break
+  }
+
+  return valueString
+}
+
 export function toPrettyString(log: Log): string {
   const messagePartials: string[] = []
 
@@ -123,7 +143,7 @@ export function toPrettyString(log: Log): string {
     let valueString: string = value as string
     if (isErrorLike(value)) {
       if (value.message) {
-        valueString = value.message
+        valueString = prettyFormatValue(value.message)
       }
       if (!valueString) {
         valueString = ''
@@ -138,24 +158,7 @@ export function toPrettyString(log: Log): string {
       }
     }
     else {
-      // eslint-disable-next-line ts/switch-exhaustiveness-check
-      switch (typeof value) {
-        case 'number':
-          valueString = pc.yellow(value)
-          break
-        case 'object':
-          valueString = pc.green(JSON.stringify(value))
-          break
-        case 'boolean':
-          valueString = pc.yellow(String(value))
-          break
-        case 'undefined':
-          valueString = pc.gray('undefined')
-          break
-        default:
-          valueString = String(value)
-          break
-      }
+      valueString = prettyFormatValue(value)
     }
 
     messagePartials.push(`${pc.gray(key)}${pc.gray('=')}${valueString}`)

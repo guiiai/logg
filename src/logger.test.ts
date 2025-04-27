@@ -40,4 +40,26 @@ describe('logger', () => {
     const error = new Error('This is an error')
     logger.errorWithError('test', error)
   })
+
+  it('should log with fields and not show [Object object]', () => {
+    setGlobalFormat(Format.Pretty)
+    const logger = useLogg('test').useGlobalConfig()
+
+    // Test array field
+    const data = {
+      database: {
+        host: 'localhost',
+        port: 5433,
+        user: 'postgres',
+        password: '123456',
+        database: 'postgres',
+        url: 'postgres://postgres:123456@localhost:5433/postgres',
+      },
+      message: {
+        batch: 100
+      },
+    }
+
+    logger.withFields(data).log('log with array fields')
+  })
 })
