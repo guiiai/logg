@@ -1,7 +1,8 @@
-import pc from './utils/picocolors'
-import { logLevelStringToLogLevelMap, logLevelToColorMap } from './constants'
 import type { Log, LogLevelString } from './types'
+
+import { logLevelStringToLogLevelMap, logLevelToColorMap } from './constants'
 import { LogLevel } from './types'
+import pc from './utils/picocolors'
 
 export interface ErrorLike {
   message: string
@@ -131,12 +132,13 @@ export function toPrettyString(log: Log): string {
         try {
           valueString += JSON.stringify(value.cause)
         }
-        catch (err) {
+        catch {
           valueString += String(value.cause)
         }
       }
     }
     else {
+      // eslint-disable-next-line ts/switch-exhaustiveness-check
       switch (typeof value) {
         case 'number':
           valueString = pc.yellow(value)

@@ -1,4 +1,4 @@
-import { Format, LogLevel, createLogg, setGlobalFormat, setGlobalLogLevel } from '../src'
+import { createLogg, Format, LogLevel, setGlobalFormat, setGlobalLogLevel } from '../src'
 
 setGlobalLogLevel(LogLevel.Debug)
 setGlobalFormat(Format.Pretty) // Otherwise it will output JSON

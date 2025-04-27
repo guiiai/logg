@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+
 import { getGlobalFormat, getGlobalLogLevel, setGlobalFormat, setGlobalLogLevel, useLogg } from './logger'
 import { Format, LogLevel } from './types'
 
