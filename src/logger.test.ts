@@ -56,7 +56,7 @@ describe('logger', () => {
         url: 'postgres://postgres:123456@localhost:5433/postgres',
       },
       message: {
-        batch: 100
+        batch: 100,
       },
     }
 
