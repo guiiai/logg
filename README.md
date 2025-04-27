@@ -12,6 +12,7 @@ Yet another simple, nearly zero dependency, structural log compliance logger imp
 - 🧩 Intuitive API: Simple and easy-to-use API for quick integration into your projects.
 
 ## Preview
+
 <img width="817" alt="image" src="https://github.com/user-attachments/assets/1cd7efb2-2257-409b-8011-7de69320f2be">
 
 ## Installation
@@ -23,7 +24,7 @@ npm install @guiiai/logg
 ## Usage
 
 ```javascript
-import { Format, LogLevel, createLogg, setGlobalFormat, setGlobalLogLevel } from '@guiiai/logg'
+import { createLogg, Format, LogLevel, setGlobalFormat, setGlobalLogLevel } from '@guiiai/logg'
 
 setGlobalLogLevel(LogLevel.Debug)
 setGlobalFormat(Format.Pretty) // Otherwise it will output JSON
@@ -83,7 +84,6 @@ log
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=guiiai/logg&type=Date)](https://star-history.com/#guiiai/logg&Date)
-
 
 ## Contributors
 

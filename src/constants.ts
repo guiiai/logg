@@ -1,6 +1,5 @@
-import pc from './utils/picocolors'
-
 import { Format, LogLevel, LogLevelString } from './types'
+import pc from './utils/picocolors'
 
 type PicoColorsFormatter = (input: string | number | null | undefined) => string
 

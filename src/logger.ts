@@ -1,11 +1,12 @@
-import { Format, LogLevel, LogLevelString } from './types'
 import {
   availableFormats,
-  availableLogLevelStrings,
   availableLogLevels,
+  availableLogLevelStrings,
   logLevelStringToLogLevelMap,
   logLevelToLogLevelStringMap,
 } from './constants'
+import { parseErrorStacks } from './stack'
+import { Format, LogLevel, LogLevelString } from './types'
 import {
   isErrorLike,
   newErrorLog,
@@ -17,7 +18,6 @@ import {
   shouldOutputWarningLevelLogWhenLogLevelIsOneOf,
   toPrettyString,
 } from './utils'
-import { parseErrorStacks } from './stack'
 
 const GLOBAL_CONFIG = {
   configured: false,
