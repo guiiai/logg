@@ -1,3 +1,6 @@
+import ErrorStackParser from 'error-stack-parser'
+import path from 'path-browserify-esm'
+
 import {
   availableFormats,
   availableLogLevels,
@@ -18,6 +21,7 @@ import {
   shouldOutputWarningLevelLogWhenLogLevelIsOneOf,
   toPrettyString,
 } from './utils'
+import { withHyperlink } from './utils/hyperlink'
 
 const GLOBAL_CONFIG = {
   configured: false,
@@ -684,3 +688,31 @@ export function createLogg(context: string): Logg {
 }
 
 export const useLogg = createLogg
+
+export function createLogger(context?: string): Logg {
+  // eslint-disable-next-line unicorn/error-message
+  const stack = ErrorStackParser.parse(new Error())
+  const currentStack = stack[1]
+  const basePath = currentStack.fileName?.replace('async', '').trim() ?? ''
+  const fileName = path.join(...basePath.split(path.sep).slice(-2))
+
+  context = context ?? `${fileName}:${currentStack.lineNumber}`
+  return createLogg(withHyperlink(basePath, context)).useGlobalConfig()
+}
+
+export const useLogger = createLogger
+
+export function initLogger(
+  level = LogLevel.Verbose,
+  format = Format.Pretty,
+) {
+  setGlobalLogLevel(level)
+  setGlobalFormat(format)
+
+  const logger = useLogg('logger').useGlobalConfig()
+  logger.withFields({ level: LogLevel[level], format }).log('Logger initialized')
+}
+
+export type Logger = Logg
+
+export { Format as LoggerFormat, LogLevel as LoggerLevel }
