@@ -415,10 +415,8 @@ export function createLogg(context: string): Logg {
         LogLevelString.Debug,
         logObj.context,
         logObj.fields,
-
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-
         ...optionalParams,
       )
 
@@ -472,10 +470,8 @@ export function createLogg(context: string): Logg {
         LogLevelString.Verbose,
         logObj.context,
         logObj.fields,
-
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-
         ...optionalParams,
       )
 
@@ -525,10 +521,8 @@ export function createLogg(context: string): Logg {
         LogLevelString.Log,
         logObj.context,
         logObj.fields,
-
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-
         ...optionalParams,
       )
 
@@ -578,11 +572,9 @@ export function createLogg(context: string): Logg {
         LogLevelString.Error,
         logObj.context,
         logObj.fields,
-
         message,
         stack,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-
         ...optionalParams,
       )
 
@@ -635,10 +627,8 @@ export function createLogg(context: string): Logg {
         LogLevelString.Warning,
         logObj.context,
         logObj.fields,
-
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-
         ...optionalParams,
       )
 
