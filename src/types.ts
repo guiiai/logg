@@ -1,3 +1,5 @@
+import type { Logg } from './logger'
+
 export enum LogLevel {
   Error,
   Warning,
@@ -39,3 +41,7 @@ export interface Log {
 export interface LoggerConfig {
   timeFormat?: string
 }
+
+export type Logger = Logg
+
+export { Format as LoggerFormat, LogLevel as LoggerLevel }

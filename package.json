@@ -4,7 +4,7 @@
   "version": "1.0.10",
   "packageManager": "pnpm@10.8.1",
   "description": "Yet another simple, nearly zero dependency, structural log compliance logger implementation.",
-  "contributors": [
+  "authors": [
     {
       "name": "Neko Ayaka",
       "author": "Neko Ayaka <neko@ayaka.moe> (https://github.com/nekomeowww)"
@@ -44,6 +44,10 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "error-stack-parser": "^2.1.4",
+    "pathe": "^2.0.3"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.12.0",
