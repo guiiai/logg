@@ -1,5 +1,5 @@
 import ErrorStackParser from 'error-stack-parser'
-import path from 'path-browserify-esm'
+import path from 'pathe'
 
 import {
   availableFormats,
@@ -697,10 +697,17 @@ export function createLogger(context?: string): Logg {
   const fileName = path.join(...basePath.split(path.sep).slice(-2))
 
   context = context ?? `${fileName}:${currentStack.lineNumber}`
-  return createLogg(withHyperlink(basePath, context)).useGlobalConfig()
+
+  return createLogg(withHyperlink(basePath, context))
 }
 
 export const useLogger = createLogger
+
+export function createGlobalLogger(context?: string): Logg {
+  return createLogger(context).useGlobalConfig()
+}
+
+export const useGlobalLogger = createGlobalLogger
 
 export function initLogger(
   level = LogLevel.Verbose,
@@ -712,7 +719,3 @@ export function initLogger(
   const logger = useLogg('logger').useGlobalConfig()
   logger.withFields({ level: LogLevel[level], format }).log('Logger initialized')
 }
-
-export type Logger = Logg
-
-export { Format as LoggerFormat, LogLevel as LoggerLevel }

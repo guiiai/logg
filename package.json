@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "error-stack-parser": "^2.1.4",
-    "path-browserify-esm": "^1.0.6"
+    "pathe": "^2.0.3"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.12.0",
