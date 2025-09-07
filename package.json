@@ -53,7 +53,6 @@
     "@unbird/eslint-config": "^1.0.2",
     "bumpp": "^10.2.3",
     "eslint": "^9.35.0",
-    "eslint-plugin-format": "^1.0.1",
     "typescript": "^5.9.2",
     "unbuild": "^3.6.1",
     "vitest": "^3.2.4"
