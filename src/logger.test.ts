@@ -64,7 +64,6 @@ describe('logg', () => {
   })
 })
 
-
 describe('logger', () => {
   it('should log with pretty and debug level', () => {
     const log = useLogger('test').withFormat(Format.Pretty).withLogLevel(LogLevel.Debug)
