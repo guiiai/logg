@@ -357,7 +357,6 @@ export function createLogg(context: string): Logg {
         throw new Error('key is required')
       }
 
-      // eslint-disable-next-line ts/no-unsafe-assignment
       return logObj.child({ [key]: value })
     },
 
@@ -416,10 +415,10 @@ export function createLogg(context: string): Logg {
         LogLevelString.Debug,
         logObj.context,
         logObj.fields,
-        // eslint-disable-next-line ts/no-unsafe-argument
+
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-        // eslint-disable-next-line ts/no-unsafe-argument
+
         ...optionalParams,
       )
 
@@ -473,10 +472,10 @@ export function createLogg(context: string): Logg {
         LogLevelString.Verbose,
         logObj.context,
         logObj.fields,
-        // eslint-disable-next-line ts/no-unsafe-argument
+
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-        // eslint-disable-next-line ts/no-unsafe-argument
+
         ...optionalParams,
       )
 
@@ -526,10 +525,10 @@ export function createLogg(context: string): Logg {
         LogLevelString.Log,
         logObj.context,
         logObj.fields,
-        // eslint-disable-next-line ts/no-unsafe-argument
+
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-        // eslint-disable-next-line ts/no-unsafe-argument
+
         ...optionalParams,
       )
 
@@ -579,11 +578,11 @@ export function createLogg(context: string): Logg {
         LogLevelString.Error,
         logObj.context,
         logObj.fields,
-        // eslint-disable-next-line ts/no-unsafe-argument
+
         message,
         stack,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-        // eslint-disable-next-line ts/no-unsafe-argument
+
         ...optionalParams,
       )
 
@@ -615,7 +614,6 @@ export function createLogg(context: string): Logg {
     },
 
     errorWithError(message: string, err: Error | unknown, ...optionalParams: any[]) {
-      // eslint-disable-next-line ts/no-unsafe-argument
       return logObj.withError(err).error(message, undefined, ...optionalParams)
     },
 
@@ -637,10 +635,10 @@ export function createLogg(context: string): Logg {
         LogLevelString.Warning,
         logObj.context,
         logObj.fields,
-        // eslint-disable-next-line ts/no-unsafe-argument
+
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-        // eslint-disable-next-line ts/no-unsafe-argument
+
         ...optionalParams,
       )
 

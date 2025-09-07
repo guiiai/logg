@@ -10,5 +10,6 @@ words:
   - localetime
   - Logg
   - Neko
+  - unbird
 ignoreWords: []
 import: []

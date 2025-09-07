@@ -40,7 +40,6 @@ export function newLog(
 
   let messageString = ''
   if (optionalParams != null && optionalParams.length > 0) {
-    // eslint-disable-next-line ts/no-unsafe-assignment
     messageString = [message, ...optionalParams].join(' ')
   }
   else {
@@ -69,7 +68,6 @@ export function newErrorLog(
   timeFormatter?: (date: Date) => string,
   ...optionalParams: [...any, string?]
 ): Log {
-  // eslint-disable-next-line ts/no-unsafe-argument
   const log = newLog(logLevel, context, fields, message, timeFormatter, ...optionalParams)
   if (typeof errorStack !== 'undefined' && errorStack !== null) {
     log.errored = true
@@ -82,7 +80,6 @@ export function newErrorLog(
 function prettyFormatValue(value: any): string {
   let valueString = ''
 
-  // eslint-disable-next-line ts/switch-exhaustiveness-check
   switch (typeof value) {
     case 'number':
       valueString = pc.yellow(value)
