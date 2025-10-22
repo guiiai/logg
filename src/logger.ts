@@ -1,3 +1,4 @@
+import { merge } from '@moeru/std'
 import ErrorStackParser from 'error-stack-parser'
 import path from 'pathe'
 
@@ -420,13 +421,16 @@ export function createLogg(context: string): Logg {
         format = getGlobalFormat()
       }
 
+      if (optionalParams != null && optionalParams.length > 0) {
+        logObj.fields = { ...logObj.fields, ...Object.fromEntries(optionalParams) }
+      }
+
       const raw = newLog(
         LogLevelString.Debug,
         logObj.context,
         logObj.fields,
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-        ...optionalParams,
       )
 
       if (typeof window !== 'undefined') {
@@ -475,13 +479,16 @@ export function createLogg(context: string): Logg {
         format = getGlobalFormat()
       }
 
+      if (optionalParams != null && optionalParams.length > 0) {
+        logObj.fields = merge(logObj.fields, ...optionalParams)
+      }
+
       const raw = newLog(
         LogLevelString.Verbose,
         logObj.context,
         logObj.fields,
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-        ...optionalParams,
       )
 
       if (typeof window !== 'undefined') {
@@ -526,13 +533,16 @@ export function createLogg(context: string): Logg {
         format = getGlobalFormat()
       }
 
+      if (optionalParams != null && optionalParams.length > 0) {
+        logObj.fields = merge(logObj.fields, ...optionalParams)
+      }
+
       const raw = newLog(
         LogLevelString.Log,
         logObj.context,
         logObj.fields,
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-        ...optionalParams,
       )
 
       if (typeof window !== 'undefined') {
@@ -577,6 +587,10 @@ export function createLogg(context: string): Logg {
         format = getGlobalFormat()
       }
 
+      if (optionalParams != null && optionalParams.length > 0) {
+        logObj.fields = merge(logObj.fields, ...optionalParams)
+      }
+
       const raw = newErrorLog(
         LogLevelString.Error,
         logObj.context,
@@ -584,7 +598,6 @@ export function createLogg(context: string): Logg {
         message,
         stack,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-        ...optionalParams,
       )
 
       if (typeof window !== 'undefined') {
@@ -632,13 +645,16 @@ export function createLogg(context: string): Logg {
         format = getGlobalFormat()
       }
 
+      if (optionalParams != null && optionalParams.length > 0) {
+        logObj.fields = merge(logObj.fields, ...optionalParams)
+      }
+
       const raw = newLog(
         LogLevelString.Warning,
         logObj.context,
         logObj.fields,
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-        ...optionalParams,
       )
 
       if (typeof window !== 'undefined') {

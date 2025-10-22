@@ -27,7 +27,6 @@ export function newLog(
   fields: Record<string, any>,
   message: string,
   timeFormatter?: (date: Date) => string,
-  ...optionalParams: [...any, string?]
 ): Log {
   let fieldsObj: { context?: string, [key: string]: any } = { context: '' }
 
@@ -38,14 +37,6 @@ export function newLog(
     fieldsObj.context = context
   }
 
-  let messageString = ''
-  if (optionalParams != null && optionalParams.length > 0) {
-    messageString = [message, ...optionalParams].join(' ')
-  }
-  else {
-    messageString = message
-  }
-
   const now = new Date()
 
   const raw: Log = {
@@ -53,7 +44,7 @@ export function newLog(
     '@localetime': timeFormatter ? timeFormatter(now) : now.toISOString(),
     'level': logLevel,
     'fields': fieldsObj,
-    'message': messageString,
+    'message': message,
   }
 
   return raw
@@ -66,9 +57,8 @@ export function newErrorLog(
   message: string,
   errorStack?: string,
   timeFormatter?: (date: Date) => string,
-  ...optionalParams: [...any, string?]
 ): Log {
-  const log = newLog(logLevel, context, fields, message, timeFormatter, ...optionalParams)
+  const log = newLog(logLevel, context, fields, message, timeFormatter)
   if (typeof errorStack !== 'undefined' && errorStack !== null) {
     log.errored = true
     log.error = { stack: errorStack }

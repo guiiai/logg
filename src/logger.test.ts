@@ -3,6 +3,18 @@ import { describe, expect, it } from 'vitest'
 import { getGlobalFormat, getGlobalLogLevel, setGlobalFormat, setGlobalLogLevel, useLogg, useLogger } from './logger'
 import { Format, LogLevel } from './types'
 
+// Test data
+const data = {
+  database: {
+    host: 'localhost',
+    port: 5433,
+    user: 'postgres',
+    password: '123456',
+    database: 'postgres',
+    url: 'postgres://postgres:123456@localhost:5433/postgres',
+  },
+}
+
 describe('logg', () => {
   it('should log with pretty and debug level', () => {
     const log = useLogg('test').withFormat(Format.Pretty).withLogLevel(LogLevel.Debug)
@@ -45,22 +57,16 @@ describe('logg', () => {
     setGlobalFormat(Format.Pretty)
     const logger = useLogg('test').useGlobalConfig()
 
-    // Test array field
-    const data = {
-      database: {
-        host: 'localhost',
-        port: 5433,
-        user: 'postgres',
-        password: '123456',
-        database: 'postgres',
-        url: 'postgres://postgres:123456@localhost:5433/postgres',
-      },
-      message: {
-        batch: 100,
-      },
-    }
-
     logger.withFields(data).log('log with array fields')
+  })
+
+  it('should log with fields and not show [Object object] when using optional params', () => {
+    setGlobalFormat(Format.Pretty)
+    const logger = useLogg('test').useGlobalConfig()
+
+    logger.log('log with array fields', data)
+    logger.log('log with array fields', { data })
+    logger.log('log with array fields', [data])
   })
 })
 
@@ -105,21 +111,6 @@ describe('logger', () => {
   it('should log with fields and not show [Object object]', () => {
     setGlobalFormat(Format.Pretty)
     const logger = useLogger('test').useGlobalConfig()
-
-    // Test array field
-    const data = {
-      database: {
-        host: 'localhost',
-        port: 5433,
-        user: 'postgres',
-        password: '123456',
-        database: 'postgres',
-        url: 'postgres://postgres:123456@localhost:5433/postgres',
-      },
-      message: {
-        batch: 100,
-      },
-    }
 
     logger.withFields(data).log('log with array fields')
   })
