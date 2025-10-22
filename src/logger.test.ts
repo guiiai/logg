@@ -84,6 +84,47 @@ describe('logg', () => {
 
     logger.log('log with array fields', data)
   })
+
+  it('should process fields in browser when using json format', () => {
+    (globalThis as any).window = {}
+    setGlobalFormat(Format.JSON)
+    const logger = useLogg('test').useGlobalConfig()
+
+    logger.log('log with array fields', data, 1, 'test')
+    logger.log('log with array fields', [1, 2, 3])
+  })
+
+  it('should parse multiple arguments', () => {
+    (globalThis as any).window = {}
+    setGlobalFormat(Format.Pretty)
+    const logger = useLogg('test').useGlobalConfig()
+
+    logger.log(`Test message with multiple arguments`, 'ABC', data, `enabled: ${true}`)
+  })
+
+  it('should parse single argument as array', () => {
+    (globalThis as any).window = {}
+    setGlobalFormat(Format.Pretty)
+    const logger = useLogg('test').useGlobalConfig()
+
+    logger.log('Test message with array argument', [1, 2, 3])
+  })
+
+  it('should parse single argument', () => {
+    (globalThis as any).window = {}
+    setGlobalFormat(Format.Pretty)
+    const logger = useLogg('test').useGlobalConfig()
+
+    logger.log('Test message with single argument', 1)
+  })
+
+  it('should parse no argument', () => {
+    (globalThis as any).window = {}
+    setGlobalFormat(Format.Pretty)
+    const logger = useLogg('test').useGlobalConfig()
+
+    logger.log('Test message with no arguments')
+  })
 })
 
 describe('logger', () => {
