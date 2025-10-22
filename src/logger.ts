@@ -421,19 +421,20 @@ export function createLogg(context: string): Logg {
         format = getGlobalFormat()
       }
 
+      let fields = logObj.fields
       if (optionalParams != null && optionalParams.length > 0) {
-        if (Object.keys(logObj.fields).length > 0) {
-          logObj.fields = [logObj.fields, ...optionalParams]
+        if (Object.keys(fields).length > 0) {
+          fields = [fields, ...optionalParams]
         }
         else {
-          logObj.fields = optionalParams
+          fields = optionalParams
         }
       }
 
       const raw = newLog(
         LogLevelString.Debug,
         logObj.context,
-        logObj.fields,
+        fields,
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
       )
@@ -441,13 +442,13 @@ export function createLogg(context: string): Logg {
       if (isBrowser() && format === Format.Pretty) {
         raw.fields = {}
 
-        if (Array.isArray(logObj.fields) && logObj.fields.length > 0) {
+        if (Array.isArray(fields) && fields.length > 0) {
           // eslint-disable-next-line no-console
-          console.debug(toPrettyString(raw), ...logObj.fields)
+          console.debug(toPrettyString(raw), ...fields)
         }
-        else if (Object.keys(logObj.fields).length > 0) {
+        else if (Object.keys(fields).length > 0) {
           // eslint-disable-next-line no-console
-          console.debug(toPrettyString(raw), logObj.fields)
+          console.debug(toPrettyString(raw), fields)
         }
         else {
           // eslint-disable-next-line no-console
@@ -475,32 +476,33 @@ export function createLogg(context: string): Logg {
         format = getGlobalFormat()
       }
 
+      let fields = logObj.fields
       if (optionalParams != null && optionalParams.length > 0) {
-        if (Object.keys(logObj.fields).length > 0) {
-          logObj.fields = [logObj.fields, ...optionalParams]
+        if (Object.keys(fields).length > 0) {
+          fields = [fields, ...optionalParams]
         }
         else {
-          logObj.fields = optionalParams
+          fields = optionalParams
         }
       }
 
       const raw = newLog(
         LogLevelString.Verbose,
         logObj.context,
-        logObj.fields,
+        fields,
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
       )
       if (isBrowser() && format === Format.Pretty) {
         raw.fields = {}
 
-        if (Array.isArray(logObj.fields) && logObj.fields.length > 0) {
+        if (Array.isArray(fields) && fields.length > 0) {
           // eslint-disable-next-line no-console
-          console.log(toPrettyString(raw), ...logObj.fields)
+          console.log(toPrettyString(raw), ...fields)
         }
-        else if (Object.keys(logObj.fields).length > 0) {
+        else if (Object.keys(fields).length > 0) {
           // eslint-disable-next-line no-console
-          console.log(toPrettyString(raw), logObj.fields)
+          console.log(toPrettyString(raw), fields)
         }
         else {
           // eslint-disable-next-line no-console
@@ -528,19 +530,20 @@ export function createLogg(context: string): Logg {
         format = getGlobalFormat()
       }
 
+      let fields = logObj.fields
       if (optionalParams != null && optionalParams.length > 0) {
-        if (Object.keys(logObj.fields).length > 0) {
-          logObj.fields = [logObj.fields, ...optionalParams]
+        if (Object.keys(fields).length > 0) {
+          fields = [fields, ...optionalParams]
         }
         else {
-          logObj.fields = optionalParams
+          fields = optionalParams
         }
       }
 
       const raw = newLog(
         LogLevelString.Log,
         logObj.context,
-        logObj.fields,
+        fields,
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
       )
@@ -548,13 +551,13 @@ export function createLogg(context: string): Logg {
       if (isBrowser() && format === Format.Pretty) {
         raw.fields = {}
 
-        if (Array.isArray(logObj.fields) && logObj.fields.length > 0) {
+        if (Array.isArray(fields) && fields.length > 0) {
           // eslint-disable-next-line no-console
-          console.log(toPrettyString(raw), ...logObj.fields)
+          console.log(toPrettyString(raw), ...fields)
         }
-        else if (Object.keys(logObj.fields).length > 0) {
+        else if (Object.keys(fields).length > 0) {
           // eslint-disable-next-line no-console
-          console.log(toPrettyString(raw), logObj.fields)
+          console.log(toPrettyString(raw), fields)
         }
         else {
           // eslint-disable-next-line no-console
@@ -582,19 +585,20 @@ export function createLogg(context: string): Logg {
         format = getGlobalFormat()
       }
 
+      let fields = logObj.fields
       if (optionalParams != null && optionalParams.length > 0) {
-        if (Object.keys(logObj.fields).length > 0) {
-          logObj.fields = [logObj.fields, ...optionalParams]
+        if (Object.keys(fields).length > 0) {
+          fields = [fields, ...optionalParams]
         }
         else {
-          logObj.fields = optionalParams
+          fields = optionalParams
         }
       }
 
       const raw = newErrorLog(
         LogLevelString.Error,
         logObj.context,
-        logObj.fields,
+        fields,
         message,
         stack,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
@@ -603,11 +607,11 @@ export function createLogg(context: string): Logg {
       if (isBrowser() && format === Format.Pretty) {
         raw.fields = {}
 
-        if (Array.isArray(logObj.fields) && logObj.fields.length > 0) {
-          console.error(toPrettyString(raw), ...logObj.fields)
+        if (Array.isArray(fields) && fields.length > 0) {
+          console.error(toPrettyString(raw), ...fields)
         }
-        else if (Object.keys(logObj.fields).length > 0) {
-          console.error(toPrettyString(raw), logObj.fields)
+        else if (Object.keys(fields).length > 0) {
+          console.error(toPrettyString(raw), fields)
         }
         else {
           console.error(toPrettyString(raw))
@@ -637,19 +641,20 @@ export function createLogg(context: string): Logg {
         format = getGlobalFormat()
       }
 
+      let fields = logObj.fields
       if (optionalParams != null && optionalParams.length > 0) {
-        if (Object.keys(logObj.fields).length > 0) {
-          logObj.fields = [logObj.fields, ...optionalParams]
+        if (Object.keys(fields).length > 0) {
+          fields = [fields, ...optionalParams]
         }
         else {
-          logObj.fields = optionalParams
+          fields = optionalParams
         }
       }
 
       const raw = newLog(
         LogLevelString.Warning,
         logObj.context,
-        logObj.fields,
+        fields,
         message,
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
       )
@@ -657,11 +662,11 @@ export function createLogg(context: string): Logg {
       if (isBrowser() && format === Format.Pretty) {
         raw.fields = {}
 
-        if (Array.isArray(logObj.fields) && logObj.fields.length > 0) {
-          console.warn(toPrettyString(raw), ...logObj.fields)
+        if (Array.isArray(fields) && fields.length > 0) {
+          console.warn(toPrettyString(raw), ...fields)
         }
-        else if (Object.keys(logObj.fields).length > 0) {
-          console.warn(toPrettyString(raw), logObj.fields)
+        else if (Object.keys(fields).length > 0) {
+          console.warn(toPrettyString(raw), fields)
         }
         else {
           console.warn(toPrettyString(raw))
