@@ -68,6 +68,22 @@ describe('logg', () => {
     logger.log('log with array fields', { data })
     logger.log('log with array fields', [data])
   })
+
+  it('should log fields directly in browser', () => {
+    (globalThis as any).window = {}
+    setGlobalFormat(Format.Pretty)
+    const logger = useLogg('test').useGlobalConfig()
+
+    logger.log('log with array fields', data)
+  })
+
+  it('should not log fields directly in browser when using json format', () => {
+    (globalThis as any).window = {}
+    setGlobalFormat(Format.JSON)
+    const logger = useLogg('test').useGlobalConfig()
+
+    logger.log('log with array fields', data)
+  })
 })
 
 describe('logger', () => {
