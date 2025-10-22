@@ -587,7 +587,7 @@ export function createLogg(context: string): Logg {
         case Format.Pretty:
           if (isBrowser()) {
             raw.fields = {}
-            // eslint-disable-next-line no-console
+
             console.error(toPrettyString(raw), logObj.fields)
             break
           }
@@ -638,7 +638,7 @@ export function createLogg(context: string): Logg {
         case Format.Pretty:
           if (isBrowser()) {
             raw.fields = {}
-            // eslint-disable-next-line no-console
+
             console.warn(toPrettyString(raw), logObj.fields)
             break
           }
