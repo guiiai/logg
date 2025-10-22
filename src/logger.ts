@@ -258,6 +258,7 @@ export function createLogg(context: string): Logg {
     errorProcessor: (err: Error | unknown) => err,
 
     timeFormatter: (inputDate: Date) => inputDate.toISOString(),
+
     useGlobalConfig: (): Logg => {
       logObj.shouldUseGlobalConfig = true
       logObj.format = getGlobalFormat()
@@ -407,276 +408,13 @@ export function createLogg(context: string): Logg {
       })
     },
 
-    debug(message: any, ...optionalParams: [...any, string?]): void {
-      let logLevel = logObj.logLevel
-      if (logObj.shouldUseGlobalConfig) {
-        logLevel = getGlobalLogLevel()
-      }
-      if (!shouldOutputDebugLevelLogWhenLogLevelIsOneOf(logLevel)) {
-        return
-      }
-
-      let format = logObj.format
-      if (logObj.shouldUseGlobalConfig) {
-        format = getGlobalFormat()
-      }
-
-      let fields = logObj.fields
-      if (optionalParams != null && optionalParams.length > 0) {
-        if (Object.keys(fields).length > 0) {
-          fields = [fields, ...optionalParams]
-        }
-        else {
-          fields = optionalParams
-        }
-      }
-
-      const raw = newLog(
-        LogLevelString.Debug,
-        logObj.context,
-        fields,
-        message,
-        logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-      )
-
-      if (isBrowser() && format === Format.Pretty) {
-        raw.fields = {}
-
-        if (Array.isArray(fields) && fields.length > 0) {
-          // eslint-disable-next-line no-console
-          console.debug(toPrettyString(raw), ...fields)
-        }
-        else if (Object.keys(fields).length > 0) {
-          // eslint-disable-next-line no-console
-          console.debug(toPrettyString(raw), fields)
-        }
-        else {
-          // eslint-disable-next-line no-console
-          console.debug(toPrettyString(raw))
-        }
-
-        return
-      }
-
-      // eslint-disable-next-line no-console
-      console.debug(format === Format.Pretty ? toPrettyString(raw) : JSON.stringify(raw))
-    },
-
-    verbose(message: any, ...optionalParams: [...any, string?]): void {
-      let logLevel = logObj.logLevel
-      if (logObj.shouldUseGlobalConfig) {
-        logLevel = getGlobalLogLevel()
-      }
-      if (!shouldOutputVerboseLevelLogWhenLogLevelIsOneOf(logLevel)) {
-        return
-      }
-
-      let format = logObj.format
-      if (logObj.shouldUseGlobalConfig) {
-        format = getGlobalFormat()
-      }
-
-      let fields = logObj.fields
-      if (optionalParams != null && optionalParams.length > 0) {
-        if (Object.keys(fields).length > 0) {
-          fields = [fields, ...optionalParams]
-        }
-        else {
-          fields = optionalParams
-        }
-      }
-
-      const raw = newLog(
-        LogLevelString.Verbose,
-        logObj.context,
-        fields,
-        message,
-        logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-      )
-      if (isBrowser() && format === Format.Pretty) {
-        raw.fields = {}
-
-        if (Array.isArray(fields) && fields.length > 0) {
-          // eslint-disable-next-line no-console
-          console.log(toPrettyString(raw), ...fields)
-        }
-        else if (Object.keys(fields).length > 0) {
-          // eslint-disable-next-line no-console
-          console.log(toPrettyString(raw), fields)
-        }
-        else {
-          // eslint-disable-next-line no-console
-          console.log(toPrettyString(raw))
-        }
-
-        return
-      }
-
-      // eslint-disable-next-line no-console
-      console.log(format === Format.Pretty ? toPrettyString(raw) : JSON.stringify(raw))
-    },
-
-    log(message: any, ...optionalParams: any[]): void {
-      let logLevel = logObj.logLevel
-      if (logObj.shouldUseGlobalConfig) {
-        logLevel = getGlobalLogLevel()
-      }
-      if (!shouldOutputLogLevelLogWhenLogLevelIsOneOf(logLevel)) {
-        return
-      }
-
-      let format = logObj.format
-      if (logObj.shouldUseGlobalConfig) {
-        format = getGlobalFormat()
-      }
-
-      let fields = logObj.fields
-      if (optionalParams != null && optionalParams.length > 0) {
-        if (Object.keys(fields).length > 0) {
-          fields = [fields, ...optionalParams]
-        }
-        else {
-          fields = optionalParams
-        }
-      }
-
-      const raw = newLog(
-        LogLevelString.Log,
-        logObj.context,
-        fields,
-        message,
-        logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-      )
-
-      if (isBrowser() && format === Format.Pretty) {
-        raw.fields = {}
-
-        if (Array.isArray(fields) && fields.length > 0) {
-          // eslint-disable-next-line no-console
-          console.log(toPrettyString(raw), ...fields)
-        }
-        else if (Object.keys(fields).length > 0) {
-          // eslint-disable-next-line no-console
-          console.log(toPrettyString(raw), fields)
-        }
-        else {
-          // eslint-disable-next-line no-console
-          console.log(toPrettyString(raw))
-        }
-
-        return
-      }
-
-      // eslint-disable-next-line no-console
-      console.log(format === Format.Pretty ? toPrettyString(raw) : JSON.stringify(raw))
-    },
-
-    error(message: any, stack?: string, ...optionalParams: any[]): void {
-      let logLevel = logObj.logLevel
-      if (logObj.shouldUseGlobalConfig) {
-        logLevel = getGlobalLogLevel()
-      }
-      if (!shouldOutputErrorLevelLogWhenLogLevelIsOneOf(logLevel)) {
-        return
-      }
-
-      let format = logObj.format
-      if (logObj.shouldUseGlobalConfig) {
-        format = getGlobalFormat()
-      }
-
-      let fields = logObj.fields
-      if (optionalParams != null && optionalParams.length > 0) {
-        if (Object.keys(fields).length > 0) {
-          fields = [fields, ...optionalParams]
-        }
-        else {
-          fields = optionalParams
-        }
-      }
-
-      const raw = newErrorLog(
-        LogLevelString.Error,
-        logObj.context,
-        fields,
-        message,
-        stack,
-        logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-      )
-
-      if (isBrowser() && format === Format.Pretty) {
-        raw.fields = {}
-
-        if (Array.isArray(fields) && fields.length > 0) {
-          console.error(toPrettyString(raw), ...fields)
-        }
-        else if (Object.keys(fields).length > 0) {
-          console.error(toPrettyString(raw), fields)
-        }
-        else {
-          console.error(toPrettyString(raw))
-        }
-
-        return
-      }
-
-      console.error(format === Format.Pretty ? toPrettyString(raw) : JSON.stringify(raw))
-    },
-
-    errorWithError(message: string, err: Error | unknown, ...optionalParams: any[]) {
-      return logObj.withError(err).error(message, undefined, ...optionalParams)
-    },
-
-    warn(message: any, ...optionalParams: [...any, string?]): void {
-      let logLevel = logObj.logLevel
-      if (logObj.shouldUseGlobalConfig) {
-        logLevel = getGlobalLogLevel()
-      }
-      if (!shouldOutputWarningLevelLogWhenLogLevelIsOneOf(logLevel)) {
-        return
-      }
-
-      let format = logObj.format
-      if (logObj.shouldUseGlobalConfig) {
-        format = getGlobalFormat()
-      }
-
-      let fields = logObj.fields
-      if (optionalParams != null && optionalParams.length > 0) {
-        if (Object.keys(fields).length > 0) {
-          fields = [fields, ...optionalParams]
-        }
-        else {
-          fields = optionalParams
-        }
-      }
-
-      const raw = newLog(
-        LogLevelString.Warning,
-        logObj.context,
-        fields,
-        message,
-        logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
-      )
-
-      if (isBrowser() && format === Format.Pretty) {
-        raw.fields = {}
-
-        if (Array.isArray(fields) && fields.length > 0) {
-          console.warn(toPrettyString(raw), ...fields)
-        }
-        else if (Object.keys(fields).length > 0) {
-          console.warn(toPrettyString(raw), fields)
-        }
-        else {
-          console.warn(toPrettyString(raw))
-        }
-
-        return
-      }
-
-      console.warn(format === Format.Pretty ? toPrettyString(raw) : JSON.stringify(raw))
-    },
+    // Placeholder implementations, will be overridden below
+    debug: () => {},
+    verbose: () => {},
+    log: () => {},
+    error: () => {},
+    errorWithError: () => {},
+    warn: () => {},
 
     // TODO: remove in next major release
     withTimeFormat: (_: string): Logg => {
@@ -695,6 +433,142 @@ export function createLogg(context: string): Logg {
       logger.errorProcessor = fn
       return logger
     },
+  }
+
+  // Helper functions
+  const getEffectiveLogLevel = (): LogLevel => {
+    return logObj.shouldUseGlobalConfig ? getGlobalLogLevel() : logObj.logLevel
+  }
+
+  const getEffectiveFormat = (): Format => {
+    return logObj.shouldUseGlobalConfig ? getGlobalFormat() : logObj.format
+  }
+
+  const getEffectiveTimeFormatter = (): (inputDate: Date) => string => {
+    return logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : (logObj.timeFormatter ?? ((inputDate: Date) => inputDate.toISOString()))
+  }
+
+  const mergeOptionalParams = (optionalParams: any[]): void => {
+    if (optionalParams != null && optionalParams.length > 0) {
+      if (Object.keys(logObj.fields).length > 0) {
+        logObj.fields = [logObj.fields, ...optionalParams]
+      }
+      else {
+        logObj.fields = optionalParams
+      }
+    }
+  }
+
+  const outputToConsole = (
+    raw: any,
+    consoleMethod: 'debug' | 'log' | 'warn' | 'error',
+  ): void => {
+    const format = getEffectiveFormat()
+
+    if (isBrowser() && format === Format.Pretty) {
+      raw.fields = {}
+
+      if (Array.isArray(logObj.fields) && logObj.fields.length > 0) {
+        // eslint-disable-next-line no-console
+        console[consoleMethod](toPrettyString(raw), ...logObj.fields)
+      }
+      else if (Object.keys(logObj.fields).length > 0) {
+        // eslint-disable-next-line no-console
+        console[consoleMethod](toPrettyString(raw), logObj.fields)
+      }
+      else {
+        // eslint-disable-next-line no-console
+        console[consoleMethod](toPrettyString(raw))
+      }
+
+      return
+    }
+
+    const output = format === Format.Pretty ? toPrettyString(raw) : JSON.stringify(raw)
+    // eslint-disable-next-line no-console
+    console[consoleMethod](output)
+  }
+
+  type SupportedLogLevel = LogLevelString.Debug | LogLevelString.Verbose | LogLevelString.Log | LogLevelString.Warning
+
+  const logLevelCheckMap: Record<SupportedLogLevel, (logLevel: LogLevel) => boolean> = {
+    [LogLevelString.Debug]: shouldOutputDebugLevelLogWhenLogLevelIsOneOf,
+    [LogLevelString.Verbose]: shouldOutputVerboseLevelLogWhenLogLevelIsOneOf,
+    [LogLevelString.Log]: shouldOutputLogLevelLogWhenLogLevelIsOneOf,
+    [LogLevelString.Warning]: shouldOutputWarningLevelLogWhenLogLevelIsOneOf,
+  }
+
+  const consoleMethodMap: Record<SupportedLogLevel, 'debug' | 'log' | 'warn'> = {
+    [LogLevelString.Debug]: 'debug',
+    [LogLevelString.Verbose]: 'log',
+    [LogLevelString.Log]: 'log',
+    [LogLevelString.Warning]: 'warn',
+  }
+
+  const logWithLevel = (
+    levelString: SupportedLogLevel,
+    message: any,
+    optionalParams: any[],
+  ): void => {
+    const logLevel = getEffectiveLogLevel()
+    const shouldOutput = logLevelCheckMap[levelString]
+
+    if (!shouldOutput(logLevel)) {
+      return
+    }
+
+    mergeOptionalParams(optionalParams)
+
+    const raw = newLog(
+      levelString,
+      logObj.context,
+      logObj.fields,
+      message,
+      getEffectiveTimeFormatter(),
+    )
+
+    outputToConsole(raw, consoleMethodMap[levelString])
+  }
+
+  // Override methods to use helper functions
+  logObj.debug = (message: any, ...optionalParams: [...any, string?]): void => {
+    logWithLevel(LogLevelString.Debug, message, optionalParams)
+  }
+
+  logObj.verbose = (message: any, ...optionalParams: [...any, string?]): void => {
+    logWithLevel(LogLevelString.Verbose, message, optionalParams)
+  }
+
+  logObj.log = (message: any, ...optionalParams: any[]): void => {
+    logWithLevel(LogLevelString.Log, message, optionalParams)
+  }
+
+  logObj.warn = (message: any, ...optionalParams: [...any, string?]): void => {
+    logWithLevel(LogLevelString.Warning, message, optionalParams)
+  }
+
+  logObj.error = (message: any, stack?: string, ...optionalParams: any[]): void => {
+    const logLevel = getEffectiveLogLevel()
+    if (!shouldOutputErrorLevelLogWhenLogLevelIsOneOf(logLevel)) {
+      return
+    }
+
+    mergeOptionalParams(optionalParams)
+
+    const raw = newErrorLog(
+      LogLevelString.Error,
+      logObj.context,
+      logObj.fields,
+      message,
+      stack,
+      getEffectiveTimeFormatter(),
+    )
+
+    outputToConsole(raw, 'error')
+  }
+
+  logObj.errorWithError = (message: string, err: Error | unknown, ...optionalParams: any[]) => {
+    return logObj.withError(err).error(message, undefined, ...optionalParams)
   }
 
   return logObj
