@@ -22,6 +22,7 @@ import {
   shouldOutputWarningLevelLogWhenLogLevelIsOneOf,
   toPrettyString,
 } from './utils'
+import { isBrowser } from './utils/browser'
 import { withHyperlink } from './utils/hyperlink'
 
 const GLOBAL_CONFIG = {
@@ -433,28 +434,18 @@ export function createLogg(context: string): Logg {
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
       )
 
-      if (typeof window !== 'undefined') {
-        if (Object.keys(logObj.fields).length > 0) {
-          // eslint-disable-next-line no-console
-          console.group(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
-          // eslint-disable-next-line no-console
-          console.debug(logObj.fields)
-          // eslint-disable-next-line no-console
-          console.groupEnd()
-        }
-        else {
-          // eslint-disable-next-line no-console
-          console.debug(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
-        }
-        return
-      }
-
       switch (format) {
         case Format.JSON:
           // eslint-disable-next-line no-console
           console.debug(JSON.stringify(raw))
           break
         case Format.Pretty:
+          if (isBrowser()) {
+            raw.fields = {}
+            // eslint-disable-next-line no-console
+            console.debug(toPrettyString(raw), ...Object.values(logObj.fields))
+            break
+          }
           // eslint-disable-next-line no-console
           console.debug(toPrettyString(raw))
           break
@@ -491,24 +482,18 @@ export function createLogg(context: string): Logg {
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
       )
 
-      if (typeof window !== 'undefined') {
-        // eslint-disable-next-line no-console
-        console.group(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
-        if (Object.keys(logObj.fields).length > 0) {
-          // eslint-disable-next-line no-console
-          console.log(logObj.fields)
-        }
-        // eslint-disable-next-line no-console
-        console.groupEnd()
-        return
-      }
-
       switch (format) {
         case Format.JSON:
           // eslint-disable-next-line no-console
           console.log(JSON.stringify(raw))
           break
         case Format.Pretty:
+          if (isBrowser()) {
+            raw.fields = {}
+            // eslint-disable-next-line no-console
+            console.log(toPrettyString(raw), ...Object.values(logObj.fields))
+            break
+          }
           // eslint-disable-next-line no-console
           console.log(toPrettyString(raw))
           break
@@ -545,24 +530,18 @@ export function createLogg(context: string): Logg {
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
       )
 
-      if (typeof window !== 'undefined') {
-        // eslint-disable-next-line no-console
-        console.group(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
-        if (Object.keys(logObj.fields).length > 0) {
-          // eslint-disable-next-line no-console
-          console.log(logObj.fields)
-        }
-        // eslint-disable-next-line no-console
-        console.groupEnd()
-        return
-      }
-
       switch (format) {
         case Format.JSON:
           // eslint-disable-next-line no-console
           console.log(JSON.stringify(raw))
           break
         case Format.Pretty:
+          if (isBrowser()) {
+            raw.fields = {}
+            // eslint-disable-next-line no-console
+            console.log(toPrettyString(raw), ...Object.values(logObj.fields))
+            break
+          }
           // eslint-disable-next-line no-console
           console.log(toPrettyString(raw))
           break
@@ -600,24 +579,18 @@ export function createLogg(context: string): Logg {
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
       )
 
-      if (typeof window !== 'undefined') {
-        // eslint-disable-next-line no-console
-        console.group(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
-        if (Object.keys(logObj.fields).length > 0) {
-          console.error(logObj.fields)
-        }
-        // eslint-disable-next-line no-console
-        console.groupEnd()
-        return
-      }
-
       switch (format) {
         case Format.JSON:
 
           console.error(JSON.stringify(raw))
           break
         case Format.Pretty:
-
+          if (isBrowser()) {
+            raw.fields = {}
+            // eslint-disable-next-line no-console
+            console.error(toPrettyString(raw), ...Object.values(logObj.fields))
+            break
+          }
           console.error(toPrettyString(raw))
           break
         default:
@@ -657,24 +630,18 @@ export function createLogg(context: string): Logg {
         logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : logObj.timeFormatter,
       )
 
-      if (typeof window !== 'undefined') {
-        // eslint-disable-next-line no-console
-        console.group(format === Format.JSON ? JSON.stringify(raw) : toPrettyString(raw))
-        if (Object.keys(logObj.fields).length > 0) {
-          console.warn(logObj.fields)
-        }
-        // eslint-disable-next-line no-console
-        console.groupEnd()
-        return
-      }
-
       switch (format) {
         case Format.JSON:
 
           console.warn(JSON.stringify(raw))
           break
         case Format.Pretty:
-
+          if (isBrowser()) {
+            raw.fields = {}
+            // eslint-disable-next-line no-console
+            console.warn(toPrettyString(raw), ...Object.values(logObj.fields))
+            break
+          }
           console.warn(toPrettyString(raw))
           break
         default:
