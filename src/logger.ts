@@ -588,13 +588,8 @@ export function createLogger(context?: string): Logg {
   return createLogg(withHyperlink(basePath, context))
 }
 
-export const useLogger = createLogger
-
-export function createGlobalLogger(context?: string): Logg {
-  return createLogger(context).useGlobalConfig()
-}
-
-export const useGlobalLogger = createGlobalLogger
+export const useLogger = (context?: string): Logg => createLogger(context).useGlobalConfig()
+export const useGlobalLogger = useLogger
 
 export function initLogger(
   level = LogLevel.Verbose,
