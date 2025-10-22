@@ -230,6 +230,11 @@ export interface Logg {
    * @param fn - callback function that takes a Date object and returns a string
    */
   withTimeFormatter: (fn: (inputDate: Date) => string) => Logg
+  /**
+   * Set the error processor for log errors to a custom function
+   * @param fn - callback function that takes an Error or unknown and returns an Error or unknown
+   */
+  withErrorProcessor: (fn: (err: Error | unknown) => Error | unknown) => Logg
 }
 
 interface InternalLogger extends Logg {
@@ -239,6 +244,7 @@ interface InternalLogger extends Logg {
   format: Format
   shouldUseGlobalConfig: boolean
   timeFormatter?: (inputDate: Date) => string
+  errorProcessor: (err: Error | unknown) => Error | unknown
 }
 
 export function createLogg(context: string): Logg {
@@ -248,6 +254,7 @@ export function createLogg(context: string): Logg {
     logLevel: LogLevel.Debug,
     format: Format.JSON,
     shouldUseGlobalConfig: false,
+    errorProcessor: (err: Error | unknown) => err,
 
     timeFormatter: (inputDate: Date) => inputDate.toISOString(),
     useGlobalConfig: (): Logg => {
@@ -361,6 +368,8 @@ export function createLogg(context: string): Logg {
     },
 
     withError: (err: Error | unknown): Logg => {
+      err = logObj.errorProcessor(err)
+
       if (!isErrorLike(err)) {
         return logObj.withField('error', String(err))
       }
@@ -668,6 +677,12 @@ export function createLogg(context: string): Logg {
     withTimeFormatter: (fn: (inputDate: Date) => string): Logg => {
       const logger = logObj.child() as InternalLogger
       logger.timeFormatter = fn
+      return logger
+    },
+
+    withErrorProcessor: (fn: (err: Error | unknown) => Error | unknown): Logg => {
+      const logger = logObj.child() as InternalLogger
+      logger.errorProcessor = fn
       return logger
     },
   }
