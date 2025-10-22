@@ -46,7 +46,6 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "@moeru/std": "0.1.0-beta.12",
     "error-stack-parser": "^2.1.4",
     "pathe": "^2.0.3"
   },

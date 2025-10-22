@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@moeru/std':
-        specifier: 0.1.0-beta.12
-        version: 0.1.0-beta.12
       error-stack-parser:
         specifier: ^2.1.4
         version: 2.1.4
@@ -511,9 +508,6 @@ packages:
 
   '@jridgewell/sourcemap-codec@1.5.0':
     resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==}
-
-  '@moeru/std@0.1.0-beta.12':
-    resolution: {integrity: sha512-9G+/pDWnFMcFDfYL/OaBgcNd5yz3bEaaR6Gd0zx3GCvMt0VKLMY93WzQoYVUtl7vodFumGwzyAM4P2L3PI8uwg==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2829,8 +2823,6 @@ snapshots:
   '@humanwhocodes/retry@0.4.2': {}
 
   '@jridgewell/sourcemap-codec@1.5.0': {}
-
-  '@moeru/std@0.1.0-beta.12': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:

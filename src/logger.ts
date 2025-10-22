@@ -1,4 +1,3 @@
-import { merge } from '@moeru/std'
 import ErrorStackParser from 'error-stack-parser'
 import path from 'pathe'
 
