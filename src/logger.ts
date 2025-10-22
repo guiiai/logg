@@ -443,7 +443,7 @@ export function createLogg(context: string): Logg {
           if (isBrowser()) {
             raw.fields = {}
             // eslint-disable-next-line no-console
-            console.debug(toPrettyString(raw), ...Object.values(logObj.fields))
+            console.debug(toPrettyString(raw), logObj.fields)
             break
           }
           // eslint-disable-next-line no-console
@@ -491,7 +491,7 @@ export function createLogg(context: string): Logg {
           if (isBrowser()) {
             raw.fields = {}
             // eslint-disable-next-line no-console
-            console.log(toPrettyString(raw), ...Object.values(logObj.fields))
+            console.log(toPrettyString(raw), logObj.fields)
             break
           }
           // eslint-disable-next-line no-console
@@ -539,7 +539,7 @@ export function createLogg(context: string): Logg {
           if (isBrowser()) {
             raw.fields = {}
             // eslint-disable-next-line no-console
-            console.log(toPrettyString(raw), ...Object.values(logObj.fields))
+            console.log(toPrettyString(raw), logObj.fields)
             break
           }
           // eslint-disable-next-line no-console
@@ -588,7 +588,7 @@ export function createLogg(context: string): Logg {
           if (isBrowser()) {
             raw.fields = {}
             // eslint-disable-next-line no-console
-            console.error(toPrettyString(raw), ...Object.values(logObj.fields))
+            console.error(toPrettyString(raw), logObj.fields)
             break
           }
           console.error(toPrettyString(raw))
@@ -639,7 +639,7 @@ export function createLogg(context: string): Logg {
           if (isBrowser()) {
             raw.fields = {}
             // eslint-disable-next-line no-console
-            console.warn(toPrettyString(raw), ...Object.values(logObj.fields))
+            console.warn(toPrettyString(raw), logObj.fields)
             break
           }
           console.warn(toPrettyString(raw))
