@@ -1,3 +1,5 @@
+import type { Log } from './types'
+
 import ErrorStackParser from 'error-stack-parser'
 import path from 'pathe'
 
@@ -460,13 +462,23 @@ export function createLogg(context: string): Logg {
   }
 
   const outputToConsole = (
-    raw: any,
+    raw: Log,
     consoleMethod: 'debug' | 'log' | 'warn' | 'error',
   ): void => {
     const format = getEffectiveFormat()
 
     if (isBrowser() && format === Format.Pretty) {
-      raw.fields = {}
+      raw.fields = Object.fromEntries(
+        Object.entries(raw.fields).filter(([key, value]) => {
+          if (key === 'isNestSystemModule'
+            || key === 'nestSystemModule'
+            || key === 'context') {
+            return [key, value]
+          }
+
+          return undefined
+        }),
+      )
 
       if (Array.isArray(logObj.fields) && logObj.fields.length > 0) {
         // eslint-disable-next-line no-console
