@@ -271,7 +271,7 @@ export function createLogg(context: string): Logg {
     child: (fields?: Record<string, any>): Logg => {
       const logger = createLogg(logObj.context) as InternalLogger
 
-      if (typeof fields !== 'undefined' && fields !== null) {
+      if (fields != null) {
         logger.fields = { ...logObj.fields, ...fields }
       }
       else {
