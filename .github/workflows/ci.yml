@@ -78,4 +78,3 @@ jobs:
 
       - name: Typecheck
         run: pnpm run test:run
-
