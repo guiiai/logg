@@ -456,20 +456,22 @@ export function createLogg(context: string): Logg {
     return logObj.shouldUseGlobalConfig ? getGlobalTimeFormatter() : (logObj.timeFormatter ?? ((inputDate: Date) => inputDate.toISOString()))
   }
 
-  const mergeOptionalParams = (optionalParams: any[]): void => {
+  const mergeOptionalParams = (optionalParams: any[]): Record<string, any> | Record<string, any>[] => {
     if (optionalParams != null && optionalParams.length > 0) {
       if (Object.keys(logObj.fields).length > 0) {
-        logObj.fields = [logObj.fields, ...optionalParams]
+        return [logObj.fields, ...optionalParams]
       }
       else {
-        logObj.fields = optionalParams
+        return optionalParams
       }
     }
+    return logObj.fields
   }
 
   const outputToConsole = (
     raw: Log,
     consoleMethod: 'debug' | 'log' | 'warn' | 'error',
+    mergedFields?: Record<string, any> | Record<string, any>[],
   ): void => {
     const format = getEffectiveFormat()
 
@@ -486,13 +488,16 @@ export function createLogg(context: string): Logg {
         }),
       )
 
-      if (Array.isArray(logObj.fields) && logObj.fields.length > 0) {
+      // Use mergedFields if provided, otherwise fall back to logObj.fields
+      const fieldsToOutput = mergedFields ?? logObj.fields
+
+      if (Array.isArray(fieldsToOutput) && fieldsToOutput.length > 0) {
         // eslint-disable-next-line no-console
-        console[consoleMethod](toPrettyString(raw), ...logObj.fields)
+        console[consoleMethod](toPrettyString(raw), ...fieldsToOutput)
       }
-      else if (Object.keys(logObj.fields).length > 0) {
+      else if (Object.keys(fieldsToOutput).length > 0) {
         // eslint-disable-next-line no-console
-        console[consoleMethod](toPrettyString(raw), logObj.fields)
+        console[consoleMethod](toPrettyString(raw), fieldsToOutput)
       }
       else {
         // eslint-disable-next-line no-console
@@ -535,17 +540,17 @@ export function createLogg(context: string): Logg {
       return
     }
 
-    mergeOptionalParams(optionalParams)
+    const mergedFields = mergeOptionalParams(optionalParams)
 
     const raw = newLog(
       levelString,
       logObj.context,
-      logObj.fields,
+      mergedFields,
       message,
       getEffectiveTimeFormatter(),
     )
 
-    outputToConsole(raw, consoleMethodMap[levelString])
+    outputToConsole(raw, consoleMethodMap[levelString], mergedFields)
   }
 
   // Override methods to use helper functions
@@ -571,18 +576,18 @@ export function createLogg(context: string): Logg {
       return
     }
 
-    mergeOptionalParams(optionalParams)
+    const mergedFields = mergeOptionalParams(optionalParams)
 
     const raw = newErrorLog(
       LogLevelString.Error,
       logObj.context,
-      logObj.fields,
+      mergedFields,
       message,
       stack,
       getEffectiveTimeFormatter(),
     )
 
-    outputToConsole(raw, 'error')
+    outputToConsole(raw, 'error', mergedFields)
   }
 
   logObj.errorWithError = (message: string, err: Error | unknown, ...optionalParams: any[]) => {

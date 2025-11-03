@@ -356,4 +356,54 @@ describe('logger (useLogger)', () => {
     expect(parsed.fields.database).toEqual(data.database)
     expect(logCall).not.toContain('[Object object]')
   })
+
+  it('should not accumulate optionalParams across multiple log calls', () => {
+    setGlobalFormat(Format.JSON)
+    setGlobalLogLevel(LogLevel.Debug)
+    const logger = useLogger('test')
+
+    // First log with optional params
+    logger.log('first log', { key1: 'value1' })
+    const firstLogCall = consoleLogSpy.mock.calls[0][0] as string
+    const firstParsed = JSON.parse(firstLogCall)
+    // Optional params are spread into fields object with numeric keys
+    expect(firstParsed.fields[0]).toEqual({ key1: 'value1' })
+    expect(firstParsed.fields.context).toBe('test')
+
+    // Second log with different optional params
+    logger.log('second log', { key2: 'value2' })
+    const secondLogCall = consoleLogSpy.mock.calls[1][0] as string
+    const secondParsed = JSON.parse(secondLogCall)
+
+    // Should only contain key2, not accumulated key1
+    expect(secondParsed.fields[0]).toEqual({ key2: 'value2' })
+    expect(secondParsed.fields[1]).toBeUndefined() // No accumulated data
+    expect(secondParsed.fields.context).toBe('test')
+  })
+
+  it('should not accumulate fields in child logger across multiple log calls', () => {
+    setGlobalFormat(Format.JSON)
+    setGlobalLogLevel(LogLevel.Debug)
+    const logger = useLogger('test').withFields({ persistent: 'field' })
+
+    // First log with optional params
+    logger.log('first log', { temp1: 'value1' })
+    const firstLogCall = consoleLogSpy.mock.calls[0][0] as string
+    const firstParsed = JSON.parse(firstLogCall)
+    // When withFields is combined with optionalParams, array is spread into object with numeric keys
+    expect(firstParsed.fields[0]).toEqual({ persistent: 'field' })
+    expect(firstParsed.fields[1]).toEqual({ temp1: 'value1' })
+    expect(firstParsed.fields.context).toBe('test')
+
+    // Second log with different optional params
+    logger.log('second log', { temp2: 'value2' })
+    const secondLogCall = consoleLogSpy.mock.calls[1][0] as string
+    const secondParsed = JSON.parse(secondLogCall)
+
+    // Should have persistent field but only temp2, not temp1
+    expect(secondParsed.fields[0]).toEqual({ persistent: 'field' })
+    expect(secondParsed.fields[1]).toEqual({ temp2: 'value2' })
+    expect(secondParsed.fields[2]).toBeUndefined() // No accumulated data
+    expect(secondParsed.fields.context).toBe('test')
+  })
 })
