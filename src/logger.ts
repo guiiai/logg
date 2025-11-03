@@ -271,7 +271,7 @@ export function createLogg(context: string): Logg {
     child: (fields?: Record<string, any>): Logg => {
       const logger = createLogg(logObj.context) as InternalLogger
 
-      if (typeof fields !== 'undefined' || fields !== null) {
+      if (typeof fields !== 'undefined' && fields !== null) {
         logger.fields = { ...logObj.fields, ...fields }
       }
       else {
@@ -302,6 +302,8 @@ export function createLogg(context: string): Logg {
 
       if (availableLogLevels.includes(logLevel)) {
         logger.logLevel = logLevel
+        // Disable global config to use local log level setting
+        logger.shouldUseGlobalConfig = false
         logger.debug(
           `setting log level to ${logLevelToLogLevelStringMap[logLevel]} (${logLevel})`,
         )
@@ -322,6 +324,8 @@ export function createLogg(context: string): Logg {
 
       if (availableLogLevelStrings.includes(logLevelString)) {
         logger.logLevel = logLevelStringToLogLevelMap[logLevelString]
+        // Disable global config to use local log level setting
+        logger.shouldUseGlobalConfig = false
         logger.debug(
           `setting log level to ${logLevelString} (${logLevelStringToLogLevelMap[logLevelString]})`,
         )
@@ -342,6 +346,8 @@ export function createLogg(context: string): Logg {
 
       if (availableFormats.includes(format)) {
         logger.format = format
+        // Disable global config to use local format setting
+        logger.shouldUseGlobalConfig = false
         logger.debug(`setting format to ${format}`)
       }
       else {

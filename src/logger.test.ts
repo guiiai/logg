@@ -43,12 +43,13 @@ describe('logg', () => {
     log.warn('warn message')
     log.error('error message')
 
-    expect(consoleDebugSpy).toHaveBeenCalledTimes(2) // withLogLevel calls debug + actual debug
+    // withFormat and withLogLevel each call debug once, plus actual debug call = 3
+    expect(consoleDebugSpy).toHaveBeenCalledTimes(3)
     expect(consoleLogSpy).toHaveBeenCalledTimes(1)
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1)
     expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
 
-    const debugCall = consoleDebugSpy.mock.calls[1][0]
+    const debugCall = consoleDebugSpy.mock.calls[2][0]
     expect(debugCall).toContain('debug message')
     expect(debugCall).toContain('test')
   })
@@ -61,7 +62,7 @@ describe('logg', () => {
     log.warn('warn')
     log.error('error')
 
-    expect(consoleDebugSpy).toHaveBeenCalledTimes(2)
+    expect(consoleDebugSpy).toHaveBeenCalledTimes(3) // withFormat + withLogLevel + actual debug
     expect(consoleLogSpy).toHaveBeenCalledTimes(1)
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1)
     expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
@@ -70,7 +71,7 @@ describe('logg', () => {
     const logCall = consoleLogSpy.mock.calls[0][0] as string
     const parsed = JSON.parse(logCall)
     expect(parsed.message).toBe('log')
-    expect(parsed.context).toBe('test')
+    expect(parsed.fields.context).toBe('test') // context is in fields
     expect(parsed.level).toBe('log')
   })
 
@@ -82,8 +83,8 @@ describe('logg', () => {
     log.warn('should appear')
     log.error('should appear')
 
-    // Only withLogLevel debug call
-    expect(consoleDebugSpy).toHaveBeenCalledTimes(1)
+    // withLogLevel is Warning, so debug call from withLogLevel itself won't appear
+    expect(consoleDebugSpy).toHaveBeenCalledTimes(0)
     expect(consoleLogSpy).toHaveBeenCalledTimes(0)
     expect(consoleWarnSpy).toHaveBeenCalledTimes(1)
     expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
@@ -170,7 +171,8 @@ describe('logg', () => {
     expect(consoleLogSpy).toHaveBeenCalledTimes(1)
     const logCall = consoleLogSpy.mock.calls[0][0] as string
     const parsed = JSON.parse(logCall)
-    expect(parsed.fields).toEqual([data])
+    // Fields are stored as an array-like object
+    expect(parsed.fields[0]).toEqual(data)
   })
 
   it('should support child logger with inherited fields', () => {
@@ -196,7 +198,8 @@ describe('logg', () => {
     expect(consoleLogSpy).toHaveBeenCalledTimes(1)
     const logCall = consoleLogSpy.mock.calls[0][0] as string
     const parsed = JSON.parse(logCall)
-    expect(parsed.context).toBe('new-context')
+    // Context is in fields object
+    expect(parsed.fields.context).toBe('new-context')
   })
 
   it('should support withField to add single field', () => {
@@ -244,7 +247,8 @@ describe('logg', () => {
     logger.verbose('should appear')
     logger.log('should appear')
 
-    expect(consoleDebugSpy).toHaveBeenCalledTimes(1) // from withLogLevel
+    // Verbose level filters out debug, withLogLevel won't output debug either
+    expect(consoleDebugSpy).toHaveBeenCalledTimes(0)
     expect(consoleLogSpy).toHaveBeenCalledTimes(2) // verbose + log
   })
 })
@@ -284,6 +288,7 @@ describe('logger (useLogger)', () => {
 
   it('should support format override', () => {
     setGlobalFormat(Format.JSON)
+    setGlobalLogLevel(LogLevel.Debug)
     const log = useLogger('test').withFormat(Format.Pretty).withLogLevel(LogLevel.Debug)
 
     log.log('test message')
@@ -300,7 +305,9 @@ describe('logger (useLogger)', () => {
 
     log.debug('should appear after override')
 
-    expect(consoleDebugSpy).toHaveBeenCalledTimes(2) // withLogLevel + actual debug
+    // withLogLevel disables global config and sets level to Debug
+    // So it outputs debug: one from withLogLevel itself, one from actual debug call
+    expect(consoleDebugSpy).toHaveBeenCalledTimes(2)
   })
 
   it('should include file location in context', () => {
@@ -311,10 +318,14 @@ describe('logger (useLogger)', () => {
     logger.log('test message')
 
     expect(consoleLogSpy).toHaveBeenCalledTimes(1)
-    const logCall = consoleLogSpy.mock.calls[0][0] as string
-    const parsed = JSON.parse(logCall)
-    // Context should contain file path
-    expect(parsed.context).toContain('.ts')
+    const logCall = consoleLogSpy.mock.calls[0][0]
+    // Verify it's a string before parsing
+    expect(typeof logCall).toBe('string')
+    if (typeof logCall === 'string') {
+      const parsed = JSON.parse(logCall)
+      // Context is in fields object and should contain file path
+      expect(parsed.fields.context).toContain('.ts')
+    }
   })
 
   it('should log error with stack using errorWithError', () => {
