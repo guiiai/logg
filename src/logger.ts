@@ -3,6 +3,7 @@ import type { Log } from './types'
 import ErrorStackParser from 'error-stack-parser'
 import path from 'pathe'
 
+import pkg from '../package.json'
 import {
   availableFormats,
   availableLogLevels,
@@ -602,7 +603,7 @@ export const useLogg = createLogg
 export function createLogger(context?: string): Logg {
   // eslint-disable-next-line unicorn/error-message
   const stack = ErrorStackParser.parse(new Error())
-  const currentStack = stack[1]
+  const currentStack = stack.filter(item => item.fileName != null && !item.fileName.includes(pkg.name))[0] ?? stack[1]
   const basePath = currentStack.fileName?.replace('async', '').trim() ?? ''
   const fileName = path.join(...basePath.split(path.sep).slice(-2))
 
