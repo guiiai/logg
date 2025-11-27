@@ -602,7 +602,7 @@ export const useLogg = createLogg
 export function createLogger(context?: string): Logg {
   // eslint-disable-next-line unicorn/error-message
   const stack = ErrorStackParser.parse(new Error())
-  const currentStack = stack[1]
+  const currentStack = stack.filter(item => item.fileName != null && !item.fileName.includes('@guiiai/logg'))[0] ?? stack[1]
   const basePath = currentStack.fileName?.replace('async', '').trim() ?? ''
   const fileName = path.join(...basePath.split(path.sep).slice(-2))
 
