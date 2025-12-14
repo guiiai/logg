@@ -236,12 +236,6 @@ export interface Logg {
    */
   warn: (message: any, ...optionalParams: [...any, string?]) => void
   /**
-   * Sets the time format for log timestamps
-   * @param format - date-fns compatible format string
-   * @deprecated use {@link withTimeFormatter} instead
-   */
-  withTimeFormat: (format: string) => Logg
-  /**
    * Set the time formatter for log timestamps to a custom function
    * @param fn - callback function that takes a Date object and returns a string
    */
@@ -438,12 +432,6 @@ export function createLogg(context: string): Logg {
     error: () => {},
     errorWithError: () => {},
     warn: () => {},
-
-    // TODO: remove in next major release
-    withTimeFormat: (_: string): Logg => {
-      const logger = logObj.child() as InternalLogger
-      return logger
-    },
 
     withTimeFormatter: (fn: (inputDate: Date) => string): Logg => {
       const logger = logObj.child() as InternalLogger
