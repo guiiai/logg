@@ -27,14 +27,14 @@ import {
 import { isBrowser } from './utils/browser'
 import { withHyperlink } from './utils/hyperlink'
 
-type AfterLogFn = ((log: Log, outputString?: string) => void) | undefined
+type HookPostLog = ((log: Log, outputString?: string) => void) | undefined
 
 const GLOBAL_CONFIG = {
   configured: false,
   logLevel: LogLevel.Debug,
   format: Format.JSON,
   timeFormatter: (inputDate: Date) => inputDate.toISOString(),
-  afterLog: undefined as AfterLogFn,
+  hookPostLog: undefined as HookPostLog,
 }
 
 export function getGlobalLogLevel(): LogLevel {
@@ -103,13 +103,13 @@ export function getGlobalTimeFormatter(): (inputDate: Date) => string {
   return GLOBAL_CONFIG.timeFormatter
 }
 
-export function setGlobalAfterLog(fn: AfterLogFn): void {
-  GLOBAL_CONFIG.afterLog = fn
+export function setGlobalAfterLog(fn: HookPostLog): void {
+  GLOBAL_CONFIG.hookPostLog = fn
   GLOBAL_CONFIG.configured = true
 }
 
-export function getGlobalAfterLog(): AfterLogFn {
-  return GLOBAL_CONFIG.afterLog
+export function getGlobalAfterLog(): HookPostLog {
+  return GLOBAL_CONFIG.hookPostLog
 }
 
 export interface Logg {
@@ -266,7 +266,7 @@ interface InternalLogger extends Logg {
   shouldUseGlobalConfig: boolean
   timeFormatter?: (inputDate: Date) => string
   errorProcessor: (err: Error | unknown) => Error | unknown
-  afterLog: AfterLogFn
+  hookPostLog: HookPostLog
 }
 
 export function createLogg(context: string): Logg {
@@ -277,7 +277,7 @@ export function createLogg(context: string): Logg {
     format: Format.JSON,
     shouldUseGlobalConfig: false,
     errorProcessor: (err: Error | unknown) => err,
-    afterLog: undefined,
+    hookPostLog: undefined,
 
     timeFormatter: (inputDate: Date) => inputDate.toISOString(),
 
@@ -462,8 +462,8 @@ export function createLogg(context: string): Logg {
       return logger
     },
 
-    withAfterLog: (fn: AfterLogFn): void => {
-      logObj.afterLog = fn
+    withAfterLog: (fn: HookPostLog): void => {
+      logObj.hookPostLog = fn
     },
   }
 
@@ -529,9 +529,9 @@ export function createLogg(context: string): Logg {
       }
 
       // Call the after log function
-      const afterLogFn = logObj.afterLog ?? getGlobalAfterLog()
-      if (afterLogFn != null) {
-        afterLogFn(raw, toPrettyString(raw))
+      const hookPostLogFn = logObj.hookPostLog ?? getGlobalAfterLog()
+      if (hookPostLogFn != null) {
+        hookPostLogFn(raw, toPrettyString(raw))
       }
 
       return
@@ -542,9 +542,9 @@ export function createLogg(context: string): Logg {
     console[consoleMethod](output)
 
     // Call the after log function
-    const afterLogFn = logObj.afterLog ?? getGlobalAfterLog()
-    if (afterLogFn != null) {
-      afterLogFn(raw, output)
+    const hookPostLogFn = logObj.hookPostLog ?? getGlobalAfterLog()
+    if (hookPostLogFn != null) {
+      hookPostLogFn(raw, output)
     }
   }
 
