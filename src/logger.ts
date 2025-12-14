@@ -103,7 +103,7 @@ export function getGlobalTimeFormatter(): (inputDate: Date) => string {
   return GLOBAL_CONFIG.timeFormatter
 }
 
-export function setGlobalAfterLog(fn: HookPostLog): void {
+export function setGlobalHookPostLog(fn: HookPostLog): void {
   GLOBAL_CONFIG.hookPostLog = fn
   GLOBAL_CONFIG.configured = true
 }
