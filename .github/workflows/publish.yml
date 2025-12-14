@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - 'v*'
-      
+
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
