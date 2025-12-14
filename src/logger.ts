@@ -27,7 +27,7 @@ import {
 import { isBrowser } from './utils/browser'
 import { withHyperlink } from './utils/hyperlink'
 
-type HookPostLog = ((log: Log, outputString?: string) => void) | undefined
+type HookPostLog = ((log: Log, formattedOutput: string) => void) | undefined
 
 const GLOBAL_CONFIG = {
   configured: false,
@@ -108,7 +108,7 @@ export function setGlobalAfterLog(fn: HookPostLog): void {
   GLOBAL_CONFIG.configured = true
 }
 
-export function getGlobalAfterLog(): HookPostLog {
+export function getGlobalHookPostLog(): HookPostLog {
   return GLOBAL_CONFIG.hookPostLog
 }
 
@@ -297,14 +297,9 @@ export function createLogg(context: string): Logg {
       else {
         logger.fields = logObj.fields
       }
-      if (logger.fields != null && 'context' in logger.fields) {
-        logger.context = logger.fields.context as string
-      }
-      else {
-        logger.context = logObj.context
-      }
 
       logger.logLevel = logObj.logLevel
+      logger.context = logObj.context
       logger.format = logObj.format
       logger.shouldUseGlobalConfig = logObj.shouldUseGlobalConfig
 
@@ -500,17 +495,7 @@ export function createLogg(context: string): Logg {
     const format = getEffectiveFormat()
 
     if (isBrowser() && format === Format.Pretty) {
-      raw.fields = Object.fromEntries(
-        Object.entries(raw.fields).filter(([key, value]) => {
-          if (key === 'isNestSystemModule'
-            || key === 'nestSystemModule'
-            || key === 'context') {
-            return [key, value]
-          }
-
-          return undefined
-        }),
-      )
+      raw.fields = {}
 
       // Use mergedFields if provided, otherwise fall back to logObj.fields
       const fieldsToOutput = mergedFields ?? logObj.fields
@@ -529,7 +514,7 @@ export function createLogg(context: string): Logg {
       }
 
       // Call the after log function
-      const hookPostLogFn = logObj.hookPostLog ?? getGlobalAfterLog()
+      const hookPostLogFn = logObj.hookPostLog ?? getGlobalHookPostLog()
       if (hookPostLogFn != null) {
         hookPostLogFn(raw, toPrettyString(raw))
       }
@@ -542,7 +527,7 @@ export function createLogg(context: string): Logg {
     console[consoleMethod](output)
 
     // Call the after log function
-    const hookPostLogFn = logObj.hookPostLog ?? getGlobalAfterLog()
+    const hookPostLogFn = logObj.hookPostLog ?? getGlobalHookPostLog()
     if (hookPostLogFn != null) {
       hookPostLogFn(raw, output)
     }

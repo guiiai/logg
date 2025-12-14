@@ -28,13 +28,10 @@ export function newLog(
   message: string,
   timeFormatter?: (date: Date) => string,
 ): Log {
-  let fieldsObj: { context?: string, [key: string]: any } = { context: '' }
+  let fieldsObj: { [key: string]: any } = {}
 
   if (typeof fields !== 'undefined' && fields !== null) {
     fieldsObj = { ...fields }
-  }
-  if (typeof context !== 'undefined' && context !== null) {
-    fieldsObj.context = context
   }
 
   const now = new Date()
@@ -43,6 +40,7 @@ export function newLog(
     '@timestamp': now.getTime(),
     '@localetime': timeFormatter ? timeFormatter(now) : now.toISOString(),
     'level': logLevel,
+    'context': context,
     'fields': fieldsObj,
     'message': message,
   }
@@ -101,22 +99,8 @@ export function toPrettyString(log: Log): string {
     ),
   )
 
-  let contextString = ''
-  if (log.fields.isNestSystemModule != null) {
-    contextString = pc.magenta(`[${log.fields.nestSystemModule}]`)
-    delete log.fields.isNestSystemModule
-    delete log.fields.nestSystemModule
-  }
-  if (log.fields.context != null) {
-    contextString = pc.magenta(`[${log.fields.context}]`)
-    delete log.fields.context
-  }
-  if (contextString.length > 0) {
-    messagePartials.push(contextString)
-  }
-  if ('module' in log.fields && log.fields.module != null) {
-    messagePartials.push(pc.magenta(`[${log.fields.module}]`))
-    delete log.fields.module
+  if (log.context.length > 0) {
+    messagePartials.push(pc.magenta(`[${log.context}]`))
   }
 
   messagePartials.push(log.message)

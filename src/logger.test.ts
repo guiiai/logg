@@ -71,7 +71,7 @@ describe('logg', () => {
     const logCall = consoleLogSpy.mock.calls[0][0] as string
     const parsed = JSON.parse(logCall)
     expect(parsed.message).toBe('log')
-    expect(parsed.fields.context).toBe('test') // context is in fields
+    expect(parsed.context).toBe('test') // context is in fields
     expect(parsed.level).toBe('log')
   })
 
@@ -198,8 +198,7 @@ describe('logg', () => {
     expect(consoleLogSpy).toHaveBeenCalledTimes(1)
     const logCall = consoleLogSpy.mock.calls[0][0] as string
     const parsed = JSON.parse(logCall)
-    // Context is in fields object
-    expect(parsed.fields.context).toBe('new-context')
+    expect(parsed.context).toBe('new-context')
   })
 
   it('should support withField to add single field', () => {
@@ -323,8 +322,7 @@ describe('logger (useLogger)', () => {
     expect(typeof logCall).toBe('string')
     if (typeof logCall === 'string') {
       const parsed = JSON.parse(logCall)
-      // Context is in fields object and should contain file path
-      expect(parsed.fields.context).toContain('.ts')
+      expect(parsed.context).toContain('.ts')
     }
   })
 
@@ -368,7 +366,7 @@ describe('logger (useLogger)', () => {
     const firstParsed = JSON.parse(firstLogCall)
     // Optional params are spread into fields object with numeric keys
     expect(firstParsed.fields[0]).toEqual({ key1: 'value1' })
-    expect(firstParsed.fields.context).toBe('test')
+    expect(firstParsed.context).toBe('test')
 
     // Second log with different optional params
     logger.log('second log', { key2: 'value2' })
@@ -378,7 +376,7 @@ describe('logger (useLogger)', () => {
     // Should only contain key2, not accumulated key1
     expect(secondParsed.fields[0]).toEqual({ key2: 'value2' })
     expect(secondParsed.fields[1]).toBeUndefined() // No accumulated data
-    expect(secondParsed.fields.context).toBe('test')
+    expect(secondParsed.context).toBe('test')
   })
 
   it('should not accumulate fields in child logger across multiple log calls', () => {
@@ -393,7 +391,7 @@ describe('logger (useLogger)', () => {
     // When withFields is combined with optionalParams, array is spread into object with numeric keys
     expect(firstParsed.fields[0]).toEqual({ persistent: 'field' })
     expect(firstParsed.fields[1]).toEqual({ temp1: 'value1' })
-    expect(firstParsed.fields.context).toBe('test')
+    expect(firstParsed.context).toBe('test')
 
     // Second log with different optional params
     logger.log('second log', { temp2: 'value2' })
@@ -404,6 +402,6 @@ describe('logger (useLogger)', () => {
     expect(secondParsed.fields[0]).toEqual({ persistent: 'field' })
     expect(secondParsed.fields[1]).toEqual({ temp2: 'value2' })
     expect(secondParsed.fields[2]).toBeUndefined() // No accumulated data
-    expect(secondParsed.fields.context).toBe('test')
+    expect(secondParsed.context).toBe('test')
   })
 })

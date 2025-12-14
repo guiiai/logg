@@ -25,10 +25,8 @@ export interface Log {
   '@timestamp': number
   '@localetime': string
   'level': LogLevelString
+  'context': string
   'fields': {
-    context?: string
-    isNestSystemModule?: boolean
-    nestSystemModule?: string
     [key: string]: any
   }
   'message': string
