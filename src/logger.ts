@@ -27,7 +27,7 @@ import {
 import { isBrowser } from './utils/browser'
 import { withHyperlink } from './utils/hyperlink'
 
-type AfterLogFn = ((log: Log) => void) | undefined
+type AfterLogFn = ((log: Log, outputString?: string) => void) | undefined
 
 const GLOBAL_CONFIG = {
   configured: false,
@@ -528,6 +528,12 @@ export function createLogg(context: string): Logg {
         console[consoleMethod](toPrettyString(raw))
       }
 
+      // Call the after log function
+      const afterLogFn = logObj.afterLog ?? getGlobalAfterLog()
+      if (afterLogFn != null) {
+        afterLogFn(raw, toPrettyString(raw))
+      }
+
       return
     }
 
@@ -538,7 +544,7 @@ export function createLogg(context: string): Logg {
     // Call the after log function
     const afterLogFn = logObj.afterLog ?? getGlobalAfterLog()
     if (afterLogFn != null) {
-      afterLogFn(raw)
+      afterLogFn(raw, output)
     }
   }
 
