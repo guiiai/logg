@@ -27,11 +27,14 @@ import {
 import { isBrowser } from './utils/browser'
 import { withHyperlink } from './utils/hyperlink'
 
+type HookPostLog = ((log: Log, outputString?: string) => void) | undefined
+
 const GLOBAL_CONFIG = {
   configured: false,
   logLevel: LogLevel.Debug,
   format: Format.JSON,
   timeFormatter: (inputDate: Date) => inputDate.toISOString(),
+  hookPostLog: undefined as HookPostLog,
 }
 
 export function getGlobalLogLevel(): LogLevel {
@@ -98,6 +101,15 @@ export function setGlobalTimeFormatter(fn: (inputDate: Date) => string): void {
 
 export function getGlobalTimeFormatter(): (inputDate: Date) => string {
   return GLOBAL_CONFIG.timeFormatter
+}
+
+export function setGlobalAfterLog(fn: HookPostLog): void {
+  GLOBAL_CONFIG.hookPostLog = fn
+  GLOBAL_CONFIG.configured = true
+}
+
+export function getGlobalAfterLog(): HookPostLog {
+  return GLOBAL_CONFIG.hookPostLog
 }
 
 export interface Logg {
@@ -239,6 +251,11 @@ export interface Logg {
    * @param fn - callback function that takes an Error or unknown and returns an Error or unknown
    */
   withErrorProcessor: (fn: (err: Error | unknown) => Error | unknown) => Logg
+  /**
+   * Set the after log function to a custom function
+   * @param fn - callback function that takes a Log object and returns a Log object
+   */
+  withAfterLog: (fn: (log: Log) => void) => void
 }
 
 interface InternalLogger extends Logg {
@@ -249,6 +266,7 @@ interface InternalLogger extends Logg {
   shouldUseGlobalConfig: boolean
   timeFormatter?: (inputDate: Date) => string
   errorProcessor: (err: Error | unknown) => Error | unknown
+  hookPostLog: HookPostLog
 }
 
 export function createLogg(context: string): Logg {
@@ -259,6 +277,7 @@ export function createLogg(context: string): Logg {
     format: Format.JSON,
     shouldUseGlobalConfig: false,
     errorProcessor: (err: Error | unknown) => err,
+    hookPostLog: undefined,
 
     timeFormatter: (inputDate: Date) => inputDate.toISOString(),
 
@@ -442,6 +461,10 @@ export function createLogg(context: string): Logg {
       logger.errorProcessor = fn
       return logger
     },
+
+    withAfterLog: (fn: HookPostLog): void => {
+      logObj.hookPostLog = fn
+    },
   }
 
   // Helper functions
@@ -505,12 +528,24 @@ export function createLogg(context: string): Logg {
         console[consoleMethod](toPrettyString(raw))
       }
 
+      // Call the after log function
+      const hookPostLogFn = logObj.hookPostLog ?? getGlobalAfterLog()
+      if (hookPostLogFn != null) {
+        hookPostLogFn(raw, toPrettyString(raw))
+      }
+
       return
     }
 
     const output = format === Format.Pretty ? toPrettyString(raw) : JSON.stringify(raw)
     // eslint-disable-next-line no-console
     console[consoleMethod](output)
+
+    // Call the after log function
+    const hookPostLogFn = logObj.hookPostLog ?? getGlobalAfterLog()
+    if (hookPostLogFn != null) {
+      hookPostLogFn(raw, output)
+    }
   }
 
   type SupportedLogLevel = LogLevelString.Debug | LogLevelString.Verbose | LogLevelString.Log | LogLevelString.Warning
