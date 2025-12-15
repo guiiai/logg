@@ -33,6 +33,7 @@ const GLOBAL_CONFIG = {
   configured: false,
   logLevel: LogLevel.Debug,
   format: Format.JSON,
+  hyperLink: false,
   timeFormatter: (inputDate: Date) => inputDate.toISOString(),
   hookPostLog: undefined as HookPostLog,
 }
@@ -92,6 +93,14 @@ export function setGlobalFormat(format: Format): void {
   }
 
   GLOBAL_CONFIG.configured = true
+}
+
+export function setGlobalHyperLink(enable: boolean): void {
+  GLOBAL_CONFIG.hyperLink = enable
+}
+
+export function getGlobalHyperLink(): boolean {
+  return GLOBAL_CONFIG.hyperLink
 }
 
 export function setGlobalTimeFormatter(fn: (inputDate: Date) => string): void {
@@ -617,7 +626,11 @@ export function createLogger(context?: string): Logg {
 
   context = context ?? `${fileName}:${currentStack.lineNumber}`
 
-  return createLogg(withHyperlink(basePath, context))
+  if (getGlobalHyperLink()) {
+    return createLogg(withHyperlink(basePath, context))
+  }
+
+  return createLogg(context)
 }
 
 export const useLogger = (context?: string): Logg => createLogger(context).useGlobalConfig()
