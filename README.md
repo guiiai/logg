@@ -27,6 +27,14 @@ Yet another simple, nearly zero dependency, structural log compliance logger imp
 npm install @guiiai/logg
 ```
 
+### Agent Skills
+
+Install the [logg skill](https://skills.sh) to your AI coding agent:
+
+```bash
+npx skills add guiiai/logg
+```
+
 ## Quick Start
 
 ```typescript
