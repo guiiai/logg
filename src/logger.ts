@@ -22,6 +22,7 @@ import {
   shouldOutputLogLevelLogWhenLogLevelIsOneOf,
   shouldOutputVerboseLevelLogWhenLogLevelIsOneOf,
   shouldOutputWarningLevelLogWhenLogLevelIsOneOf,
+  stringifyErrorCause,
   toPrettyString,
 } from './utils'
 import { isBrowser } from './utils/browser'
@@ -409,12 +410,7 @@ export function createLogg(context: string): Logg {
         logger = logger.withField('stack', err.stack)
       }
       if (err.cause != null) {
-        try {
-          logger = logger.withField('cause', JSON.stringify(err.cause))
-        }
-        catch {
-          logger = logger.withField('cause', String(err.cause))
-        }
+        logger = logger.withField('cause', stringifyErrorCause(err.cause))
       }
 
       return logger

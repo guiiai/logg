@@ -21,6 +21,30 @@ export function isErrorLike(err: unknown): err is ErrorLike {
   return false
 }
 
+export function stringifyErrorCause(cause: unknown): string | undefined {
+  const errors = new WeakMap<Error, Record<string, unknown>>()
+
+  try {
+    return JSON.stringify(cause, (_key, value: unknown) => {
+      if (!(value instanceof Error)) {
+        return value
+      }
+
+      const existing = errors.get(value)
+      if (existing) {
+        return existing
+      }
+
+      const serialized = { ...value, name: value.name, message: value.message, stack: value.stack, cause: value.cause }
+      errors.set(value, serialized)
+      return serialized
+    })
+  }
+  catch {
+    return String(cause)
+  }
+}
+
 export function newLog(
   logLevel: LogLevelString,
   context: string,
@@ -120,12 +144,7 @@ export function toPrettyString(log: Log): string {
         valueString = ''
       }
       if (value.cause != null) {
-        try {
-          valueString += JSON.stringify(value.cause)
-        }
-        catch {
-          valueString += String(value.cause)
-        }
+        valueString += stringifyErrorCause(value.cause)
       }
     }
     else {

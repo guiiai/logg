@@ -227,6 +227,76 @@ describe('logg', () => {
     expect(parsed.fields.stack).toBeDefined()
   })
 
+  it.each([Format.JSON, Format.Pretty])('preserves nested Error causes in %s output', (format) => {
+    const rootCause = Object.assign(new Error('relation does not exist'), { code: '42P01' })
+    const cause = new Error('query failed', { cause: rootCause })
+    const error = new Error('request failed', { cause })
+    const logger = useLogg('test').withFormat(format)
+
+    logger.withError(error).error('operation failed')
+
+    const output = consoleErrorSpy.mock.calls[0][0] as string
+    const serialized = JSON.stringify({
+      name: cause.name,
+      message: cause.message,
+      stack: cause.stack,
+      cause: { code: '42P01', name: rootCause.name, message: rootCause.message, stack: rootCause.stack },
+    })
+    if (format === Format.JSON) {
+      const parsed = JSON.parse(output)
+      expect(typeof parsed.fields.cause).toBe('string')
+      expect(JSON.parse(parsed.fields.cause)).toEqual(JSON.parse(serialized))
+    }
+    else {
+      expect(output).toContain('relation does not exist')
+      expect(output).toContain('42P01')
+      expect(output).toContain(JSON.stringify(rootCause.stack))
+    }
+  })
+
+  it('preserves Error causes in pretty error fields', () => {
+    const cause = new Error('connection failed')
+    const logger = useLogg('test').withFormat(Format.Pretty)
+
+    logger.withField('failure', new Error('query failed', { cause })).error('operation failed')
+
+    const output = consoleErrorSpy.mock.calls[0][0] as string
+    expect(output).toContain('connection failed')
+    expect(output).toContain(JSON.stringify(cause.stack))
+  })
+
+  it('preserves repeated Error references inside object causes', () => {
+    const failure = new Error('connection failed')
+    const logger = useLogg('test').withFormat(Format.JSON)
+
+    logger.withError(new Error('query failed', { cause: { first: failure, second: failure } })).error('operation failed')
+
+    const parsed = JSON.parse(consoleErrorSpy.mock.calls[0][0] as string)
+    const cause = JSON.parse(parsed.fields.cause)
+    expect(cause.first.message).toBe('connection failed')
+    expect(cause.second).toEqual(cause.first)
+  })
+
+  it.each(['connection failed', 0, false, { code: '42P01' }])('preserves non-Error cause %j', (cause) => {
+    const logger = useLogg('test').withFormat(Format.JSON)
+
+    logger.withError(new Error('query failed', { cause })).error('operation failed')
+
+    const parsed = JSON.parse(consoleErrorSpy.mock.calls[0][0] as string)
+    expect(parsed.fields.cause).toBe(JSON.stringify(cause))
+  })
+
+  it('retains the string fallback for circular Error causes', () => {
+    const cause = new Error('connection failed')
+    cause.cause = cause
+    const logger = useLogg('test').withFormat(Format.JSON)
+
+    logger.withError(new Error('query failed', { cause })).error('operation failed')
+
+    const parsed = JSON.parse(consoleErrorSpy.mock.calls[0][0] as string)
+    expect(parsed.fields.cause).toBe(String(cause))
+  })
+
   it('should handle non-Error objects in withError', () => {
     setGlobalFormat(Format.JSON)
     const logger = useLogg('test').withLogLevel(LogLevel.Debug)
