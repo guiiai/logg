@@ -92,7 +92,8 @@ log
 ```typescript
 try {
   // Some operation
-} catch (err) {
+}
+catch (err) {
   // Automatically extracts error message, stack trace, and cause
   log.withError(err).error('Operation failed')
 
@@ -187,7 +188,7 @@ const log = createGlobalLogger()
 Initializes global logger configuration with defaults.
 
 ```typescript
-import { initLogger, LogLevel, Format } from '@guiiai/logg'
+import { Format, initLogger, LogLevel } from '@guiiai/logg'
 
 initLogger(LogLevel.Verbose, Format.Pretty)
 ```
@@ -228,14 +229,12 @@ initLogger(LogLevel.Verbose, Format.Pretty)
 #### Log Level
 
 ```typescript
-import { getGlobalLogLevel, setGlobalLogLevel, LogLevel } from '@guiiai/logg'
+import { getGlobalLogLevel, getGlobalLogLevelString, LogLevel, setGlobalLogLevel, setGlobalLogLevelString } from '@guiiai/logg'
 
 setGlobalLogLevel(LogLevel.Debug)
 const level = getGlobalLogLevel()
 
 // Or use string-based methods
-import { setGlobalLogLevelString, getGlobalLogLevelString } from '@guiiai/logg'
-
 setGlobalLogLevelString('debug')
 const levelString = getGlobalLogLevelString()
 ```
@@ -243,7 +242,7 @@ const levelString = getGlobalLogLevelString()
 #### Format
 
 ```typescript
-import { getGlobalFormat, setGlobalFormat, Format } from '@guiiai/logg'
+import { Format, getGlobalFormat, setGlobalFormat } from '@guiiai/logg'
 
 setGlobalFormat(Format.Pretty)
 const format = getGlobalFormat()
@@ -252,9 +251,9 @@ const format = getGlobalFormat()
 #### Time Formatter
 
 ```typescript
-import { setGlobalTimeFormatter, getGlobalTimeFormatter } from '@guiiai/logg'
+import { getGlobalTimeFormatter, setGlobalTimeFormatter } from '@guiiai/logg'
 
-setGlobalTimeFormatter((date) => date.toISOString())
+setGlobalTimeFormatter(date => date.toISOString())
 const formatter = getGlobalTimeFormatter()
 ```
 
@@ -304,7 +303,7 @@ Log levels control which messages are output. Higher levels include all lower le
 Structured JSON output, ideal for production environments and log aggregation tools.
 
 ```json
-{"level":"log","context":"app","timestamp":"2024-01-01T00:00:00.000Z","message":"User logged in","fields":{"userId":"123"}}
+{ "level": "log", "context": "app", "timestamp": "2024-01-01T00:00:00.000Z", "message": "User logged in", "fields": { "userId": "123" } }
 ```
 
 #### Pretty Format
